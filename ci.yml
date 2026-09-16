@@ -1,0 +1,16 @@
+name: Basic CI
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate repository structure
+        run: |
+          test -f README.md
+          test -f notes.md
+          echo "Repository validation successful"
