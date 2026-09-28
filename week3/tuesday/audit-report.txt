@@ -1,0 +1,78 @@
+=== Service Accounts ===
+uid=997(kk-api) gid=972(kk-api) groups=972(kk-api),969(kijanikiosk)
+uid=994(kk-payments) gid=971(kk-payments) groups=971(kk-payments),969(kijanikiosk)
+uid=993(kk-logs) gid=970(kk-logs) groups=970(kk-logs),969(kijanikiosk)
+kijanikiosk:x:969:kk-api,kk-payments,kk-logs,derickharon
+=== Directory Structure ===
+total 36
+drwxr-x--- 9 root        kijanikiosk 4096 Sep 27 20:17 .
+drwxr-xr-x 6 root        root        4096 Sep 25 12:12 ..
+drwxr-x--- 2 kk-api      kk-api      4096 Sep 27 20:17 api
+drwxrwxrwx 2 root        root        4096 Sep 25 12:12 app
+drwxr-x---+2 root        kijanikiosk 4096 Sep 27 20:17 config
+drwxr-x--- 2 kk-logs     kk-logs     4096 Sep 27 20:17 logs
+drwxr-x--- 2 kk-payments kk-payments 4096 Sep 27 20:17 payments
+drwxrwxrwx 2 root        root        4096 Sep 27 20:17 scripts
+drwxr-x--- 3 root        kijanikiosk 4096 Sep 27 20:17 shared
+=== Config Files ===
+total 16
+drwxr-x---+2 root kijanikiosk 4096 Sep 27 20:17 .
+drwxr-x--- 9 root kijanikiosk 4096 Sep 27 20:17 ..
+-rw-r-----+1 root kijanikiosk  133 Sep 27 20:17 db.env
+-rw-r-----+1 root kijanikiosk  108 Sep 27 20:17 payments-api.env
+=== Shared Logs ===
+total 16
+drwxr-x--- 3 root    kijanikiosk 4096 Sep 27 20:17 .
+drwxr-x--- 9 root    kijanikiosk 4096 Sep 27 20:17 ..
+drwxrws---+2 kk-logs kk-logs     4096 Sep 27 20:17 logs
+=== ACLs: shared/logs ===
+# file: opt/kijanikiosk/shared/logs/
+# owner: kk-logs
+# group: kk-logs
+# flags: -s-
+user::rwx
+user:kk-payments:r-x
+user:kk-api:rwx
+user:derickharon:r-x
+group::rwx
+mask::rwx
+other::---
+default:user::rwx
+default:user:kk-payments:r-x
+default:user:kk-api:rwx
+default:user:derickharon:r-x
+default:group::rwx
+default:mask::rwx
+default:other::---
+
+=== ACLs: config ===
+# file: opt/kijanikiosk/config/
+# owner: root
+# group: kijanikiosk
+user::rwx
+user:derickharon:r-x
+group::r-x
+mask::r-x
+other::---
+default:user::rwx
+default:user:derickharon:r--
+default:group::r-x
+default:mask::r-x
+default:other::---
+
+=== SUID Files in /opt ===
+(empty result = PASS)
+=== Sudo Policy for amina ===
+User amina may run the following commands on derickharon:
+    (root) /usr/bin/systemctl restart kijanikiosk-api.service, /usr/bin/systemctl restart kijanikiosk-payments.service, /usr/bin/systemctl restart kijanikiosk-logs.service, /usr/bin/systemctl status kijanikiosk-api.service --no-pager, /usr/bin/systemctl status kijanikiosk-payments.service --no-pager, /usr/bin/systemctl status kijanikiosk-logs.service --no-pager, /usr/bin/journalctl -u kijanikiosk-api.service --no-pager, /usr/bin/journalctl -u kijanikiosk-payments.service --no-pager, /usr/bin/journalctl -u kijanikiosk-logs.service --no-pager, /usr/bin/journalctl -u kijanikiosk-api.service -f, /usr/bin/journalctl -u kijanikiosk-payments.service -f, /usr/bin/journalctl -u kijanikiosk-logs.service -f, sudoedit /etc/nginx/sites-available/kijanikiosk
+=== Cross-service isolation ===
+ls: cannot open directory '/opt/kijanikiosk/payments/': Permission denied
+PASS: kk-api cannot access payments/
+ls: cannot open directory '/opt/kijanikiosk/api/': Permission denied
+PASS: kk-payments cannot access api/
+DB_HOST=internal-postgres.kijanikiosk.internal
+DB_PORT=5432
+DB_NAME=kijanikiosk_prod
+DB_USER=kk_app
+DB_PASSWORD=s3cr3t-pr0d-p@ssword
+PASS: kk-api can read config
