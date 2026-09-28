@@ -1,0 +1,68 @@
+# /etc/sudoers.d/amina
+# Restricted sudo policy for Amina (KijaniKiosk operations).
+#
+# Scope defined by Tendo:
+#   - restart the three KijaniKiosk services
+#   - check status of the three services
+#   - read journal logs for the three services
+#   - safely edit the nginx site config
+# No shells, editors run as root, or interpreters are granted.
+#
+# NOTE ON PATHS: adjust the unit names and the nginx path below to match
+# the real ones on the host. Command paths were confirmed with:
+#   which systemctl  -> /usr/bin/systemctl
+#   which journalctl -> /usr/bin/journalctl
+#   which sudoedit   -> /usr/bin/sudoedit
+
+
+# --- Restart only, and only the three named units --------------------------
+# Grants: bring each KijaniKiosk service back up after a change or crash.
+# Avoids: because "restart" and the exact unit are both pinned, this does NOT
+#         allow "stop" (denial of service) or acting on any other unit such as
+#         sshd or nginx. A bare "/usr/bin/systemctl" would have allowed all of
+#         those.
+Cmnd_Alias KK_RESTART = /usr/bin/systemctl restart kijanikiosk-api.service, \
+                        /usr/bin/systemctl restart kijanikiosk-payments.service, \
+                        /usr/bin/systemctl restart kijanikiosk-logs.service
+
+# --- Status, with the pager disabled ---------------------------------------
+# Grants: check whether each service is running.
+# Avoids: --no-pager stops systemctl from opening the output in "less". Run as
+#         root, less accepts "!bash", which would spawn a root shell. Forcing
+#         --no-pager removes that escape. Only the three named units are
+#         allowed, so status of other services is denied.
+Cmnd_Alias KK_STATUS  = /usr/bin/systemctl status kijanikiosk-api.service --no-pager, \
+                        /usr/bin/systemctl status kijanikiosk-payments.service --no-pager, \
+                        /usr/bin/systemctl status kijanikiosk-logs.service --no-pager
+
+# --- Journal logs for the three units --------------------------------------
+# Grants: read (and follow) the logs of each KijaniKiosk service.
+# Avoids: the "-u <unit>" is fixed per rule, so Amina cannot swap in "-u sshd"
+#         or drop "-u" to read the entire system journal. --no-pager closes the
+#         same "!bash" pager escape as above; "-f" streams with no pager.
+Cmnd_Alias KK_LOGS    = /usr/bin/journalctl -u kijanikiosk-api.service --no-pager, \
+                        /usr/bin/journalctl -u kijanikiosk-payments.service --no-pager, \
+                        /usr/bin/journalctl -u kijanikiosk-logs.service --no-pager, \
+                        /usr/bin/journalctl -u kijanikiosk-api.service -f, \
+                        /usr/bin/journalctl -u kijanikiosk-payments.service -f, \
+                        /usr/bin/journalctl -u kijanikiosk-logs.service -f
+
+# --- Edit the nginx config safely ------------------------------------------
+# Grants: edit one specific nginx site file.
+# Avoids: sudoedit copies the file out, opens it in Amina's editor as HER user,
+#         and writes it back as root only on save. The editor never runs as
+#         root, so there is no ":!bash" root shell as there would be with
+#         "sudo vim". The path is pinned to one file, so no other config can be
+#         edited this way.
+Cmnd_Alias KK_NGINX   = sudoedit /etc/nginx/sites-available/kijanikiosk
+
+
+# --- Grant -----------------------------------------------------------------
+# (root) means these run as root only, not as any other user. Only the four
+# aliases above are granted; everything else is implicitly denied.
+amina ALL=(root) KK_RESTART, KK_STATUS, KK_LOGS, KK_NGINX
+
+
+# Install with mode 0440 and validate before relying on it:
+#   sudo chmod 0440 /etc/sudoers.d/amina
+#   sudo visudo -c
