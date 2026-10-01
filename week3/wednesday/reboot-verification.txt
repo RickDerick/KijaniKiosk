@@ -1,0 +1,32 @@
+=== systemctl status kk-api.service ===
+○ kk-api.service - KijaniKiosk API service
+     Loaded: loaded (/etc/systemd/system/kk-api.service; enabled; preset: enabled)
+     Active: inactive (dead) since Mon 2026-09-28 21:48:51 EAT; 7min ago
+   Duration: 268ms
+ Invocation: 5560185c7b8442ceaf2edcbd1dc071dc
+    Process: 2107 ExecStart=/usr/bin/node /opt/kijanikiosk/api/server.js (code=exited, status=0/SUCCESS)
+   Main PID: 2107 (code=exited, status=0/SUCCESS)
+   Mem peak: 46.2M
+        CPU: 65ms
+
+Sep 28 21:48:50 derickharon systemd[1]: Started kk-api.service - KijaniKiosk API service.
+Sep 28 21:48:51 derickharon node[2107]: KijaniKiosk API running as: 997
+Sep 28 21:48:51 derickharon systemd[1]: kk-api.service: Deactivated successfully.
+
+=== apt-mark showhold ===
+nginx
+nodejs
+
+=== ufw status verbose ===
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW IN    Anywhere                  
+80/tcp                     ALLOW IN    Anywhere                  
+22/tcp (v6)                ALLOW IN    Anywhere (v6)             
+80/tcp (v6)                ALLOW IN    Anywhere (v6)             
+
