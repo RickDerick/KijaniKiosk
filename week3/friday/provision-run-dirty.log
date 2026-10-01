@@ -1,0 +1,158 @@
+[2026-09-29 09:56:33] [INFO]  Phase 0: preconditions
+[2026-09-29 09:56:33] [OK]    Running as root on Ubuntu 26.04
+[2026-09-29 09:56:33] [INFO]  Phase 1: packages
+W: https://packages.sury.org/php/dists/trixie/InRelease: The key(s) in the keyring /etc/apt/keyrings/deb.sury.org-php.gpg are ignored as the file is not readable by user executing gpgv.
+W: An error occurred during the signature verification. The repository is not updated and the previous index files will be used. Signature verification failed: https://packages.sury.org/php trixie InRelease: Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring "/etc/apt/keyrings/deb.sury.org-php.gpg"  Caused by:     0: Reading "/etc/apt/keyrings/deb.sury.org-php.gpg": No such file or directory (os error 2)     1: No such file or directory (os error 2)
+W: Failed to fetch https://packages.sury.org/php/dists/trixie/InRelease  Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring "/etc/apt/keyrings/deb.sury.org-php.gpg"  Caused by:     0: Reading "/etc/apt/keyrings/deb.sury.org-php.gpg": No such file or directory (os error 2)     1: No such file or directory (os error 2)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute-updates/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute-backports/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Some index files failed to download. They have been ignored, or old ones used instead.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+curl is already the newest version (8.21.0-2).
+gnupg is already the newest version (2.4.9-7).
+acl is already the newest version (2.4.0-1).
+ufw is already the newest version (0.36.2-10).
+jq is already the newest version (1.8.2-1).
+Solving dependencies...
+The following packages were automatically installed and are no longer required:
+  apache2 apache2-bin apache2-data apache2-utils gyp javascript-common
+  libada-url0-3 libapr1t64 libaprutil1-dbd-sqlite3 libaprutil1-ldap
+  libaprutil1t64 libhdr-histogram6 libjs-esprima libjs-events libjs-inherits
+  libjs-prettify libjs-regenerate libjs-sprintf-js libllhttp9.4 librtmp1
+  libsimdjson33 libsimdutf33 libssl-dev libuv1-dev node-abbrev
+  node-ampproject-remapping node-ansi-colors node-ansi-escapes node-ansi-regex
+  node-ansi-styles node-aproba node-are-we-there-yet node-argparse
+  node-array-from node-arrify node-async node-babel-plugin-add-module-exports
+  node-babel7-runtime node-balanced-match node-base64-js
+  node-binary-extensions node-bl node-brace-expansion node-buffer
+  node-call-bind-apply-helpers node-camelcase node-caniuse-lite node-chalk
+  node-chokidar node-chownr node-chrome-trace-event node-cli-cursor
+  node-cli-spinners node-cli-table node-cli-width node-clipboard node-cliui
+  node-clone node-clone-deep node-color-convert node-color-name node-colors
+  node-columnify node-commander node-commondir node-concat-stream
+  node-console-control-strings node-convert-source-map node-core-js
+  node-core-js-pure node-d node-data-uri-to-buffer node-decompress-response
+  node-deep-is node-defaults node-define-property node-delegates node-diff
+  node-electron-to-chromium node-encoding node-env-paths node-err-code
+  node-error-ex node-es-errors node-es-module-lexer node-es5-ext
+  node-es6-iterator node-es6-symbol node-escape-string-regexp
+  node-eslint-utils node-eslint-visitor-keys node-esquery node-estraverse
+  node-esutils node-event-emitter node-events node-external-editor
+  node-fancy-log node-fast-deep-equal node-fast-levenshtein node-fetch
+  node-find-up node-flatted node-for-in node-for-own node-foreground-child
+  node-fs-readdir-recursive node-fs-write-stream-atomic node-function-bind
+  node-gauge node-get-caller-file node-get-stream node-globals node-got
+  node-graceful-fs node-growl node-has-flag node-has-unicode
+  node-hosted-git-info node-iconv-lite node-ieee754 node-iferr
+  node-import-local node-imurmurhash node-indent-string node-inherits node-ini
+  node-interpret node-ip-address node-ip-regex node-is-arrayish node-is-buffer
+  node-is-descriptor node-is-extendable node-is-extglob node-is-object
+  node-is-path-cwd node-is-plain-obj node-is-plain-object node-is-stream
+  node-is-windows node-isarray node-isexe node-isobject node-jackspeak
+  node-js-tokens node-jschardet node-json-buffer node-json-parse-better-errors
+  node-json-schema node-json-schema-traverse node-json-stable-stringify
+  node-jsonify node-jsonparse node-kind-of node-levn node-loader-runner
+  node-locate-path node-lodash-packages node-long node-lowercase-keys
+  node-lru-cache node-memfs node-merge-descriptors node-merge-stream
+  node-mimic-fn node-mimic-response node-minimatch node-minimist node-minipass
+  node-mkdirp node-mute-stream node-n3 node-negotiator node-neo-async
+  node-npm-run-path node-npmlog node-object-inspect node-once node-optimist
+  node-optionator node-osenv node-p-cancelable node-p-limit node-p-locate
+  node-p-map node-parse-ms node-path-dirname node-path-exists
+  node-path-is-inside node-path-to-regexp node-path-type node-pify
+  node-pkg-dir node-polite-json node-postcss-value-parser node-prelude-ls
+  node-pretty-ms node-prismjs node-process node-promise-inflight
+  node-promise-retry node-promzard node-prr node-quick-lru node-randombytes
+  node-react-is node-read node-readable-stream node-rechoir node-regenerate
+  node-regenerate-unicode-properties node-regenerator-runtime
+  node-regenerator-transform node-regexpp node-regjsgen node-repeat-string
+  node-require-directory node-require-from-string node-resolve
+  node-resolve-cwd node-resolve-from node-restore-cursor node-resumer
+  node-retry node-run-async node-run-queue node-safe-buffer
+  node-serialize-javascript node-set-blocking node-shebang-command
+  node-signal-exit node-slash node-slice-ansi node-smart-buffer node-socks
+  node-source-list-map node-source-map node-spdx-correct node-spdx-exceptions
+  node-spdx-expression-parse node-spdx-license-ids node-sprintf-js node-ssri
+  node-string-decoder node-string-width node-strip-ansi node-strip-bom
+  node-strip-eof node-supports-color node-tapable node-tar node-terser
+  node-text-table node-through node-time-stamp node-tmp
+  node-to-fast-properties node-tslib node-type-check node-type-detect
+  node-typedarray node-unicode-canonical-property-names-ecmascript
+  node-unicode-match-property-value-ecmascript
+  node-unicode-property-aliases-ecmascript node-unique-filename
+  node-util-deprecate node-uuid node-v8flags node-validate-npm-package-license
+  node-watchpack node-wcwidth.js node-webpack-sources node-which-typed-array
+  node-wide-align node-wordwrap node-wrap-ansi node-wrappy node-write
+  node-write-file-atomic node-xtend node-y18n node-yallist node-yaml
+  php8.4-opcache php8.4-readline wabt
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 1358 not upgraded.
+[2026-09-29 09:57:23] [WARN]  Found unexpected hold on 'curl' - removing (not managed here)
+W: https://packages.sury.org/php/dists/trixie/InRelease: The key(s) in the keyring /etc/apt/keyrings/deb.sury.org-php.gpg are ignored as the file is not readable by user executing gpgv.
+W: An error occurred during the signature verification. The repository is not updated and the previous index files will be used. Signature verification failed: https://packages.sury.org/php trixie InRelease: Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring "/etc/apt/keyrings/deb.sury.org-php.gpg"  Caused by:     0: Reading "/etc/apt/keyrings/deb.sury.org-php.gpg": No such file or directory (os error 2)     1: No such file or directory (os error 2)
+W: Failed to fetch https://packages.sury.org/php/dists/trixie/InRelease  Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring "/etc/apt/keyrings/deb.sury.org-php.gpg"  Caused by:     0: Reading "/etc/apt/keyrings/deb.sury.org-php.gpg": No such file or directory (os error 2)     1: No such file or directory (os error 2)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute-updates/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute-backports/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Some index files failed to download. They have been ignored, or old ones used instead.
+[2026-09-29 09:58:15] [OK]    nginx already at pinned 1.30.4-5 - skipping install
+[2026-09-29 09:58:15] [OK]    nodejs present (v24.21.0) - skipping install
+[2026-09-29 09:58:15] [OK]    Holds set: nginx nodejs (nginx version: nginx/1.30.4, node v24.21.0)
+[2026-09-29 09:58:15] [INFO]  Phase 2: service accounts
+[2026-09-29 09:58:16] [OK]    group kijanikiosk exists (GID 969)
+[2026-09-29 09:58:16] [OK]    already exists: kk-api (UID 997)
+[2026-09-29 09:58:16] [OK]    already exists: kk-payments (UID 994)
+[2026-09-29 09:58:16] [OK]    already exists: kk-logs (UID 993)
+[2026-09-29 09:58:16] [OK]    ensured amina in kijanikiosk group
+[2026-09-29 09:58:16] [INFO]  Phase 3: directories, modes, ACLs
+[2026-09-29 09:58:16] [OK]    reset /opt/kijanikiosk/config to 750 (was 777)
+[2026-09-29 09:58:16] [OK]    ACLs on shared/logs re-asserted (access + default)
+[2026-09-29 09:58:16] [INFO]  Phase 4: systemd units (three, inline)
+[2026-09-29 09:58:17] [OK]    three units written and enabled (not started - no app code yet)
+[2026-09-29 09:58:17] [INFO]  Phase 5: firewall (reset + intent)
+Rules updated
+Rules updated (v6)
+Rules updated
+Rules updated (v6)
+Rules updated
+Rules updated
+Rules updated
+Rules updated (v6)
+[2026-09-29 09:58:20] [OK]    ufw rebuilt: 22, 80, 3001(loopback+monitoring allow / external deny)
+[2026-09-29 09:58:20] [INFO]  Phase 7: journal persistence + logrotate
+[2026-09-29 09:58:20] [OK]    journal persistent, capped 500M
+[2026-09-29 09:58:20] [OK]    logrotate config valid (--debug passed)
+[2026-09-29 09:58:20] [INFO]  Phase 8: health checks
+[2026-09-29 09:58:21] [OK]    health JSON written (services likely down - expected, no app code)
+[2026-09-29 09:58:21] [INFO]  Phase 6: verification
+[2026-09-29 09:58:21] [OK]    user kk-api exists
+[2026-09-29 09:58:21] [OK]    user kk-payments exists
+[2026-09-29 09:58:21] [OK]    user kk-logs exists
+[2026-09-29 09:58:21] [OK]    dir api exists
+[2026-09-29 09:58:21] [OK]    dir payments exists
+[2026-09-29 09:58:21] [OK]    dir logs exists
+[2026-09-29 09:58:21] [OK]    dir config exists
+[2026-09-29 09:58:21] [OK]    dir scripts exists
+[2026-09-29 09:58:21] [OK]    dir shared/logs exists
+[2026-09-29 09:58:21] [OK]    dir health exists
+[2026-09-29 09:58:21] [OK]    no SUID files in tree
+[2026-09-29 09:58:21] [OK]    config mode is 750 (repaired)
+[2026-09-29 09:58:21] [OK]    nginx held
+[2026-09-29 09:58:21] [OK]    nodejs held
+[2026-09-29 09:58:21] [OK]    curl hold removed
+[2026-09-29 09:58:21] [OK]    kk-api.service enabled
+[2026-09-29 09:58:21] [OK]    kk-payments.service enabled
+[2026-09-29 09:58:21] [OK]    kk-logs.service enabled
+[2026-09-29 09:58:21] [OK]    kk-payments depends on kk-api (After+Wants)
+[2026-09-29 09:58:21] [OK]    ufw: SSH 22 allowed
+[2026-09-29 09:58:21] [OK]    ufw: HTTP 80 allowed
+[2026-09-29 09:58:21] [OK]    ufw: 3001 external deny present
+[2026-09-29 09:58:21] [OK]    ufw: 3001 loopback/monitoring allow present
+[2026-09-29 09:58:21] [OK]    journal persistent
+[2026-09-29 09:58:21] [OK]    logrotate config valid
+[2026-09-29 09:58:21] [OK]    health JSON present
+-----------------------------------------------------------
+[2026-09-29 09:58:21] [OK]    ALL VERIFICATION CHECKS PASSED
