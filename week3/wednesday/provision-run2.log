@@ -1,0 +1,213 @@
+[2026-09-28 21:37:17] [INFO]  Preconditions OK: running as root on Ubuntu 26.04
+[2026-09-28 21:37:17] [INFO]  Updating package index and installing prerequisites
+W: https://packages.sury.org/php/dists/trixie/InRelease: The key(s) in the keyring /etc/apt/keyrings/deb.sury.org-php.gpg are ignored as the file is not readable by user executing gpgv.
+W: An error occurred during the signature verification. The repository is not updated and the previous index files will be used. Signature verification failed: https://packages.sury.org/php trixie InRelease: Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring "/etc/apt/keyrings/deb.sury.org-php.gpg"  Caused by:     0: Reading "/etc/apt/keyrings/deb.sury.org-php.gpg": No such file or directory (os error 2)     1: No such file or directory (os error 2)
+W: Failed to fetch https://packages.sury.org/php/dists/trixie/InRelease  Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring "/etc/apt/keyrings/deb.sury.org-php.gpg"  Caused by:     0: Reading "/etc/apt/keyrings/deb.sury.org-php.gpg": No such file or directory (os error 2)     1: No such file or directory (os error 2)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute-updates/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute-backports/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Some index files failed to download. They have been ignored, or old ones used instead.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+curl is already the newest version (8.21.0-2).
+gnupg is already the newest version (2.4.9-7).
+acl is already the newest version (2.4.0-1).
+ufw is already the newest version (0.36.2-10).
+Solving dependencies...
+The following packages were automatically installed and are no longer required:
+  apache2 apache2-bin apache2-data apache2-utils gyp javascript-common
+  libada-url0-3 libapr1t64 libaprutil1-dbd-sqlite3 libaprutil1-ldap
+  libaprutil1t64 libhdr-histogram6 libjs-esprima libjs-events libjs-inherits
+  libjs-prettify libjs-regenerate libjs-sprintf-js libllhttp9.4 librtmp1
+  libsimdjson33 libsimdutf33 libssl-dev libuv1-dev node-abbrev
+  node-ampproject-remapping node-ansi-colors node-ansi-escapes node-ansi-regex
+  node-ansi-styles node-aproba node-are-we-there-yet node-argparse
+  node-array-from node-arrify node-async node-babel-plugin-add-module-exports
+  node-babel7-runtime node-balanced-match node-base64-js
+  node-binary-extensions node-bl node-brace-expansion node-buffer
+  node-call-bind-apply-helpers node-camelcase node-caniuse-lite node-chalk
+  node-chokidar node-chownr node-chrome-trace-event node-cli-cursor
+  node-cli-spinners node-cli-table node-cli-width node-clipboard node-cliui
+  node-clone node-clone-deep node-color-convert node-color-name node-colors
+  node-columnify node-commander node-commondir node-concat-stream
+  node-console-control-strings node-convert-source-map node-core-js
+  node-core-js-pure node-d node-data-uri-to-buffer node-decompress-response
+  node-deep-is node-defaults node-define-property node-delegates node-diff
+  node-electron-to-chromium node-encoding node-env-paths node-err-code
+  node-error-ex node-es-errors node-es-module-lexer node-es5-ext
+  node-es6-iterator node-es6-symbol node-escape-string-regexp
+  node-eslint-utils node-eslint-visitor-keys node-esquery node-estraverse
+  node-esutils node-event-emitter node-events node-external-editor
+  node-fancy-log node-fast-deep-equal node-fast-levenshtein node-fetch
+  node-find-up node-flatted node-for-in node-for-own node-foreground-child
+  node-fs-readdir-recursive node-fs-write-stream-atomic node-function-bind
+  node-gauge node-get-caller-file node-get-stream node-globals node-got
+  node-graceful-fs node-growl node-has-flag node-has-unicode
+  node-hosted-git-info node-iconv-lite node-ieee754 node-iferr
+  node-import-local node-imurmurhash node-indent-string node-inherits node-ini
+  node-interpret node-ip-address node-ip-regex node-is-arrayish node-is-buffer
+  node-is-descriptor node-is-extendable node-is-extglob node-is-object
+  node-is-path-cwd node-is-plain-obj node-is-plain-object node-is-stream
+  node-is-windows node-isarray node-isexe node-isobject node-jackspeak
+  node-js-tokens node-jschardet node-json-buffer node-json-parse-better-errors
+  node-json-schema node-json-schema-traverse node-json-stable-stringify
+  node-jsonify node-jsonparse node-kind-of node-levn node-loader-runner
+  node-locate-path node-lodash-packages node-long node-lowercase-keys
+  node-lru-cache node-memfs node-merge-descriptors node-merge-stream
+  node-mimic-fn node-mimic-response node-minimatch node-minimist node-minipass
+  node-mkdirp node-mute-stream node-n3 node-negotiator node-neo-async
+  node-npm-run-path node-npmlog node-object-inspect node-once node-optimist
+  node-optionator node-osenv node-p-cancelable node-p-limit node-p-locate
+  node-p-map node-parse-ms node-path-dirname node-path-exists
+  node-path-is-inside node-path-to-regexp node-path-type node-pify
+  node-pkg-dir node-polite-json node-postcss-value-parser node-prelude-ls
+  node-pretty-ms node-prismjs node-process node-promise-inflight
+  node-promise-retry node-promzard node-prr node-quick-lru node-randombytes
+  node-react-is node-read node-readable-stream node-rechoir node-regenerate
+  node-regenerate-unicode-properties node-regenerator-runtime
+  node-regenerator-transform node-regexpp node-regjsgen node-repeat-string
+  node-require-directory node-require-from-string node-resolve
+  node-resolve-cwd node-resolve-from node-restore-cursor node-resumer
+  node-retry node-run-async node-run-queue node-safe-buffer
+  node-serialize-javascript node-set-blocking node-shebang-command
+  node-signal-exit node-slash node-slice-ansi node-smart-buffer node-socks
+  node-source-list-map node-source-map node-spdx-correct node-spdx-exceptions
+  node-spdx-expression-parse node-spdx-license-ids node-sprintf-js node-ssri
+  node-string-decoder node-string-width node-strip-ansi node-strip-bom
+  node-strip-eof node-supports-color node-tapable node-tar node-terser
+  node-text-table node-through node-time-stamp node-tmp
+  node-to-fast-properties node-tslib node-type-check node-type-detect
+  node-typedarray node-unicode-canonical-property-names-ecmascript
+  node-unicode-match-property-value-ecmascript
+  node-unicode-property-aliases-ecmascript node-unique-filename
+  node-util-deprecate node-uuid node-v8flags node-validate-npm-package-license
+  node-watchpack node-wcwidth.js node-webpack-sources node-which-typed-array
+  node-wide-align node-wordwrap node-wrap-ansi node-wrappy node-write
+  node-write-file-atomic node-xtend node-y18n node-yallist node-yaml
+  php8.4-opcache php8.4-readline wabt
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 1359 not upgraded.
+[2026-09-28 21:38:05] [INFO]  Installing nginx=1.30.4-5 and nodejs (node 24.x)
+W: https://packages.sury.org/php/dists/trixie/InRelease: The key(s) in the keyring /etc/apt/keyrings/deb.sury.org-php.gpg are ignored as the file is not readable by user executing gpgv.
+W: An error occurred during the signature verification. The repository is not updated and the previous index files will be used. Signature verification failed: https://packages.sury.org/php trixie InRelease: Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring "/etc/apt/keyrings/deb.sury.org-php.gpg"  Caused by:     0: Reading "/etc/apt/keyrings/deb.sury.org-php.gpg": No such file or directory (os error 2)     1: No such file or directory (os error 2)
+W: Failed to fetch https://packages.sury.org/php/dists/trixie/InRelease  Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring "/etc/apt/keyrings/deb.sury.org-php.gpg"  Caused by:     0: Reading "/etc/apt/keyrings/deb.sury.org-php.gpg": No such file or directory (os error 2)     1: No such file or directory (os error 2)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute-updates/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Failed to fetch http://ke.archive.ubuntu.com/ubuntu/dists/resolute-backports/InRelease  Cannot initiate the connection to ke.archive.ubuntu.com:80 (2c0f:fe40:8001:10::1). - connect (101: Network is unreachable)
+W: Some index files failed to download. They have been ignored, or old ones used instead.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+nginx is already the newest version (1.30.4-5).
+nodejs is already the newest version (24.21.0-1nodesource1).
+Solving dependencies...
+The following packages were automatically installed and are no longer required:
+  apache2 apache2-bin apache2-data apache2-utils gyp javascript-common
+  libada-url0-3 libapr1t64 libaprutil1-dbd-sqlite3 libaprutil1-ldap
+  libaprutil1t64 libhdr-histogram6 libjs-esprima libjs-events libjs-inherits
+  libjs-prettify libjs-regenerate libjs-sprintf-js libllhttp9.4 librtmp1
+  libsimdjson33 libsimdutf33 libssl-dev libuv1-dev node-abbrev
+  node-ampproject-remapping node-ansi-colors node-ansi-escapes node-ansi-regex
+  node-ansi-styles node-aproba node-are-we-there-yet node-argparse
+  node-array-from node-arrify node-async node-babel-plugin-add-module-exports
+  node-babel7-runtime node-balanced-match node-base64-js
+  node-binary-extensions node-bl node-brace-expansion node-buffer
+  node-call-bind-apply-helpers node-camelcase node-caniuse-lite node-chalk
+  node-chokidar node-chownr node-chrome-trace-event node-cli-cursor
+  node-cli-spinners node-cli-table node-cli-width node-clipboard node-cliui
+  node-clone node-clone-deep node-color-convert node-color-name node-colors
+  node-columnify node-commander node-commondir node-concat-stream
+  node-console-control-strings node-convert-source-map node-core-js
+  node-core-js-pure node-d node-data-uri-to-buffer node-decompress-response
+  node-deep-is node-defaults node-define-property node-delegates node-diff
+  node-electron-to-chromium node-encoding node-env-paths node-err-code
+  node-error-ex node-es-errors node-es-module-lexer node-es5-ext
+  node-es6-iterator node-es6-symbol node-escape-string-regexp
+  node-eslint-utils node-eslint-visitor-keys node-esquery node-estraverse
+  node-esutils node-event-emitter node-events node-external-editor
+  node-fancy-log node-fast-deep-equal node-fast-levenshtein node-fetch
+  node-find-up node-flatted node-for-in node-for-own node-foreground-child
+  node-fs-readdir-recursive node-fs-write-stream-atomic node-function-bind
+  node-gauge node-get-caller-file node-get-stream node-globals node-got
+  node-graceful-fs node-growl node-has-flag node-has-unicode
+  node-hosted-git-info node-iconv-lite node-ieee754 node-iferr
+  node-import-local node-imurmurhash node-indent-string node-inherits node-ini
+  node-interpret node-ip-address node-ip-regex node-is-arrayish node-is-buffer
+  node-is-descriptor node-is-extendable node-is-extglob node-is-object
+  node-is-path-cwd node-is-plain-obj node-is-plain-object node-is-stream
+  node-is-windows node-isarray node-isexe node-isobject node-jackspeak
+  node-js-tokens node-jschardet node-json-buffer node-json-parse-better-errors
+  node-json-schema node-json-schema-traverse node-json-stable-stringify
+  node-jsonify node-jsonparse node-kind-of node-levn node-loader-runner
+  node-locate-path node-lodash-packages node-long node-lowercase-keys
+  node-lru-cache node-memfs node-merge-descriptors node-merge-stream
+  node-mimic-fn node-mimic-response node-minimatch node-minimist node-minipass
+  node-mkdirp node-mute-stream node-n3 node-negotiator node-neo-async
+  node-npm-run-path node-npmlog node-object-inspect node-once node-optimist
+  node-optionator node-osenv node-p-cancelable node-p-limit node-p-locate
+  node-p-map node-parse-ms node-path-dirname node-path-exists
+  node-path-is-inside node-path-to-regexp node-path-type node-pify
+  node-pkg-dir node-polite-json node-postcss-value-parser node-prelude-ls
+  node-pretty-ms node-prismjs node-process node-promise-inflight
+  node-promise-retry node-promzard node-prr node-quick-lru node-randombytes
+  node-react-is node-read node-readable-stream node-rechoir node-regenerate
+  node-regenerate-unicode-properties node-regenerator-runtime
+  node-regenerator-transform node-regexpp node-regjsgen node-repeat-string
+  node-require-directory node-require-from-string node-resolve
+  node-resolve-cwd node-resolve-from node-restore-cursor node-resumer
+  node-retry node-run-async node-run-queue node-safe-buffer
+  node-serialize-javascript node-set-blocking node-shebang-command
+  node-signal-exit node-slash node-slice-ansi node-smart-buffer node-socks
+  node-source-list-map node-source-map node-spdx-correct node-spdx-exceptions
+  node-spdx-expression-parse node-spdx-license-ids node-sprintf-js node-ssri
+  node-string-decoder node-string-width node-strip-ansi node-strip-bom
+  node-strip-eof node-supports-color node-tapable node-tar node-terser
+  node-text-table node-through node-time-stamp node-tmp
+  node-to-fast-properties node-tslib node-type-check node-type-detect
+  node-typedarray node-unicode-canonical-property-names-ecmascript
+  node-unicode-match-property-value-ecmascript
+  node-unicode-property-aliases-ecmascript node-unique-filename
+  node-util-deprecate node-uuid node-v8flags node-validate-npm-package-license
+  node-watchpack node-wcwidth.js node-webpack-sources node-which-typed-array
+  node-wide-align node-wordwrap node-wrap-ansi node-wrappy node-write
+  node-write-file-atomic node-xtend node-y18n node-yallist node-yaml
+  php8.4-opcache php8.4-readline wabt
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 1359 not upgraded.
+nginx was already set on hold.
+nodejs was already set on hold.
+[2026-09-28 21:38:51] [INFO]  Installed nginx version: nginx/1.30.4, node v24.21.0
+[2026-09-28 21:38:52] [INFO]  Added existing user amina to kijanikiosk
+[2026-09-28 21:38:52] [INFO]  Directory tree, ownership, modes and ACLs applied
+[2026-09-28 21:38:53] [INFO]  kk-api.service written and enabled (not started)
+Default incoming policy changed to 'deny'
+(be sure to update your rules accordingly)
+Default outgoing policy changed to 'allow'
+(be sure to update your rules accordingly)
+Skipping adding existing rule
+Skipping adding existing rule (v6)
+Skipping adding existing rule
+Skipping adding existing rule (v6)
+Firewall is active and enabled on system startup
+[2026-09-28 21:38:57] [INFO]  ufw configured: allow 22/tcp and 80/tcp, deny all other incoming
+[OK]   user kk-api exists
+[OK]   user kk-payments exists
+[OK]   user kk-logs exists
+[OK]   directory /opt/kijanikiosk/api exists
+[OK]   directory /opt/kijanikiosk/payments exists
+[OK]   directory /opt/kijanikiosk/logs exists
+[OK]   directory /opt/kijanikiosk/config exists
+[OK]   directory /opt/kijanikiosk/scripts exists
+[OK]   directory /opt/kijanikiosk/shared/logs exists
+[OK]   no SUID files in /opt/kijanikiosk
+[OK]   nginx is held
+[OK]   nodejs is held
+[OK]   unit has NoNewPrivileges
+[OK]   unit has PrivateTmp
+[OK]   unit has ProtectSystem
+[OK]   kk-api.service is enabled
+[OK]   ufw is active
+[OK]   ufw allows 22/tcp
+[OK]   ufw allows 80/tcp
+[2026-09-28 21:38:57] [INFO]  Verification passed: all checks OK

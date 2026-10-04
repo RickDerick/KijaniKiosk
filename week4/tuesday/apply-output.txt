@@ -1,0 +1,30 @@
+null_resource.kijanikiosk_api: Creating...
+local_file.inventory: Creating...
+local_file.inventory: Creation complete after 0s [id=b3a77ff181eaccbdd1db34626d3b91d12875a576]
+null_resource.kijanikiosk_api: Provisioning with 'remote-exec'...
+null_resource.kijanikiosk_api (remote-exec): Connecting to remote host via SSH...
+null_resource.kijanikiosk_api (remote-exec):   Host: 10.156.170.218
+null_resource.kijanikiosk_api (remote-exec):   User: ubuntu
+null_resource.kijanikiosk_api (remote-exec):   Password: false
+null_resource.kijanikiosk_api (remote-exec):   Private key: true
+null_resource.kijanikiosk_api (remote-exec):   Certificate: false
+null_resource.kijanikiosk_api (remote-exec):   SSH Agent: true
+null_resource.kijanikiosk_api (remote-exec):   Checking Host Key: false
+null_resource.kijanikiosk_api (remote-exec):   Target Platform: unix
+null_resource.kijanikiosk_api (remote-exec): Connected!
+null_resource.kijanikiosk_api (remote-exec): Connected to kijanikiosk-api (staging)
+null_resource.kijanikiosk_api (remote-exec): Linux kijanikiosk-api 7.0.0-34-generic #34-Ubuntu SMP PREEMPT_DYNAMIC Wed Sep  2 14:29:37 UTC 2026 x86_64 GNU/Linux
+null_resource.kijanikiosk_api (remote-exec): No LSB modules are available.
+null_resource.kijanikiosk_api (remote-exec): Distributor ID:	Ubuntu
+null_resource.kijanikiosk_api (remote-exec): Description:	Ubuntu 26.04.1 LTS
+null_resource.kijanikiosk_api (remote-exec): Release:	26.04
+null_resource.kijanikiosk_api (remote-exec): Codename:	resolute
+null_resource.kijanikiosk_api: Creation complete after 1s [id=4059058632800744573]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+api_server_ip = "10.156.170.218"
+inventory_file = "./inventory-staging.ini"
+ssh_command = "ssh -i ~/.ssh/kijanikiosk ubuntu@10.156.170.218"

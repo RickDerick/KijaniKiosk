@@ -1,0 +1,95 @@
+=== getent passwd (service accounts) ===
+kk-api:x:997:972:KijaniKiosk API service account:/nonexistent:/usr/sbin/nologin
+kk-payments:x:994:971:KijaniKiosk payments service account:/nonexistent:/usr/sbin/nologin
+kk-logs:x:993:970:KijaniKiosk log aggregator service account:/nonexistent:/usr/sbin/nologin
+=== getent group kijanikiosk ===
+kijanikiosk:x:969:kk-api,kk-payments,kk-logs,derickharon,amina
+=== ls -la /opt/kijanikiosk/ ===
+total 36
+drwxr-x--- 9 root        kijanikiosk 4096 Sep 27 20:17 .
+drwxr-xr-x 6 root        root        4096 Sep 25 12:12 ..
+drwxr-x--- 2 kk-api      kk-api      4096 Sep 27 20:17 api
+drwxrwxrwx 2 root        root        4096 Sep 25 12:12 app
+drwxr-x---+2 root        kijanikiosk 4096 Sep 27 20:17 config
+drwxr-x--- 2 kk-logs     kk-logs     4096 Sep 27 20:17 logs
+drwxr-x--- 2 kk-payments kk-payments 4096 Sep 27 20:17 payments
+drwxr-x--- 2 root        root        4096 Sep 27 20:17 scripts
+drwxr-x--- 3 root        kijanikiosk 4096 Sep 27 20:17 shared
+=== getfacl shared/logs ===
+# file: opt/kijanikiosk/shared/logs/
+# owner: kk-logs
+# group: kk-logs
+# flags: -s-
+user::rwx
+user:kk-payments:r-x
+user:kk-api:rwx
+user:derickharon:r-x
+group::rwx
+mask::rwx
+other::---
+default:user::rwx
+default:user:kk-payments:r-x
+default:user:kk-api:rwx
+default:user:derickharon:r-x
+default:group::rwx
+default:mask::rwx
+default:other::---
+
+=== getfacl config ===
+# file: opt/kijanikiosk/config/
+# owner: root
+# group: kijanikiosk
+user::rwx
+user:derickharon:r-x
+group::r-x
+mask::r-x
+other::---
+default:user::rwx
+default:user:derickharon:r--
+default:group::r-x
+default:mask::r-x
+default:other::---
+
+=== ufw status numbered ===
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 22/tcp                     ALLOW IN    Anywhere                  
+[ 2] 80/tcp                     ALLOW IN    Anywhere                  
+[ 3] 22/tcp (v6)                ALLOW IN    Anywhere (v6)             
+[ 4] 80/tcp (v6)                ALLOW IN    Anywhere (v6)             
+
+=== apt-mark showhold ===
+nginx
+nodejs
+=== systemd kk- units ===
+kk-api.service                                 enabled         enabled
+=== systemd-analyze security kk-api ===
+  NAME                                                        DESCRIPTION                                                             EXPOSURE
+✗ RemoveIPC=                                                  Service user may leave SysV IPC objects around                               0.1
+✗ RootDirectory=/RootImage=                                   Service runs within the host's root directory                                0.1
+✓ User=/DynamicUser=                                          Service runs under a static non-root user identity                      
+✗ CapabilityBoundingSet=~CAP_SYS_TIME                         Service processes may change the system clock                                0.2
+=== du shared/logs ===
+8.0K	/opt/kijanikiosk/shared/logs/
+=== journal disk usage ===
+Archived and active journals take up 251.5M in the file system.
+
+=== INJECTED DIRTY STATE (VM inherited clean ufw + only kk-api unit) ===
+Injected: ufw deny 3001, chmod 777 config, apt-mark hold curl
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 22/tcp                     ALLOW IN    Anywhere                  
+[ 2] 80/tcp                     ALLOW IN    Anywhere                  
+[ 3] 3001                       DENY IN     Anywhere                   # stale rule from incident - should be reset
+[ 4] 22/tcp (v6)                ALLOW IN    Anywhere (v6)             
+[ 5] 80/tcp (v6)                ALLOW IN    Anywhere (v6)             
+[ 6] 3001 (v6)                  DENY IN     Anywhere (v6)              # stale rule from incident - should be reset
+
+drwxrwxrwx+ 2 root kijanikiosk 4096 Sep 27 20:17 /opt/kijanikiosk/config
+curl
+nginx
+nodejs
