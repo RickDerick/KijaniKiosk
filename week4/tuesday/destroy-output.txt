@@ -1,0 +1,53 @@
+local_file.inventory: Refreshing state... [id=b3a77ff181eaccbdd1db34626d3b91d12875a576]
+null_resource.kijanikiosk_api: Refreshing state... [id=4059058632800744573]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # local_file.inventory will be destroyed
+  - resource "local_file" "inventory" {
+      - content              = <<-EOT
+            [kijanikiosk_api]
+            kijanikiosk-api ansible_host=10.156.170.218 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/kijanikiosk
+        EOT -> null
+      - content_base64sha256 = "Jr4S5LA/6Rt8vaTQc4+klJKqr986gUGrnfluwQkGz6E=" -> null
+      - content_base64sha512 = "llkXHzNLGTEdCM+fW6r7LtbcjlW8W/DIC7vTsiDMaDcrb4LDiwQXs2O6HGgtp0FYE9eyQtOBZTKWS8hBZbH6eQ==" -> null
+      - content_md5          = "42c1708d4d63aaf26a82e8a05afc7b45" -> null
+      - content_sha1         = "b3a77ff181eaccbdd1db34626d3b91d12875a576" -> null
+      - content_sha256       = "26be12e4b03fe91b7cbda4d0738fa49492aaafdf3a8141ab9df96ec10906cfa1" -> null
+      - content_sha512       = "9659171f334b19311d08cf9f5baafb2ed6dc8e55bc5bf0c80bbbd3b220cc68372b6f82c38b0417b363ba1c682da7415813d7b242d3816532964bc84165b1fa79" -> null
+      - directory_permission = "0777" -> null
+      - file_permission      = "0644" -> null
+      - filename             = "./inventory-staging.ini" -> null
+      - id                   = "b3a77ff181eaccbdd1db34626d3b91d12875a576" -> null
+    }
+
+  # null_resource.kijanikiosk_api will be destroyed
+  - resource "null_resource" "kijanikiosk_api" {
+      - id       = "4059058632800744573" -> null
+      - triggers = {
+          - "ip" = "10.156.170.218"
+        } -> null
+    }
+
+Plan: 0 to add, 0 to change, 2 to destroy.
+
+Changes to Outputs:
+  - api_server_ip  = "10.156.170.218" -> null
+  - inventory_file = "./inventory-staging.ini" -> null
+  - ssh_command    = "ssh -i ~/.ssh/kijanikiosk ubuntu@10.156.170.218" -> null
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: 
+local_file.inventory: Destroying... [id=b3a77ff181eaccbdd1db34626d3b91d12875a576]
+local_file.inventory: Destruction complete after 0s
+null_resource.kijanikiosk_api: Destroying... [id=4059058632800744573]
+null_resource.kijanikiosk_api: Destruction complete after 0s
+
+Destroy complete! Resources: 2 destroyed.
