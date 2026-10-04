@@ -1,0 +1,15 @@
+# Manual Provisioning Decisions - KijaniKiosk API Server
+
+| Decision          | Value I chose | Reason |
+|-------------------|---------------|--------|
+| Cloud provider    | AWS | Free tier available for practice; widely used; strong Terraform support for the next stage |
+| Region            | eu-west-1 (Ireland) | Enabled by default, full service availability, lower latency to Kenya than US regions. af-south-1 (Cape Town) is closer but opt-in and more expensive |
+| Operating system  | Ubuntu Server 24.04 LTS (ami-xxxxxxxx) | Long-term support until 2029, free tier eligible, easy to install PHP 8.x, Nginx, MySQL and Node for a Laravel/Vue stack |
+| Instance type     | t3.micro (2 vCPU, 1 GiB RAM) | Free tier eligible; enough for a low-traffic practice API |
+| VPC               | Default VPC (vpc-xxxxxxxx) | Already exists with internet access configured; a custom VPC is unnecessary for a single practice server |
+| Subnet            | Default public subnet in eu-west-1a (subnet-xxxxxxxx) | Public subnet so the server is reachable from the internet; one AZ is enough for one instance |
+| Security group    | kijanikiosk-api-sg: SSH 22 from my IP only; HTTP 80 and HTTPS 443 from 0.0.0.0/0 | Least privilege: only I can SSH in, while the API is publicly reachable. MySQL 3306 is not exposed |
+| SSH key pair      | kijanikiosk-key (ED25519, .pem) | Key-based auth is more secure than passwords; a dedicated key per project limits damage if it leaks |
+| Root volume size  | 20 GiB gp3 | Default 8 GiB is tight for OS, Composer/npm dependencies, logs and MySQL data; stays within the 30 GiB free tier limit |
+| Public IP?        | Yes, auto-assigned public IPv4 | Needed to reach the API and SSH from outside AWS. Not an Elastic IP, so it changes on stop/start, which is acceptable for practice |
+| Tags / labels     | Name=kijanikiosk-api-server, Project=KijaniKiosk, Environment=dev, Owner=<me>, ManagedBy=manual | Makes resources easy to identify, filter and track costs; ManagedBy distinguishes this from the later Terraform-built server |
