@@ -1,0 +1,9 @@
+# Terraform
+*.tfvars
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform/
+crash.log
+
+# Do NOT ignore .terraform.lock.hcl - it pins provider versions
