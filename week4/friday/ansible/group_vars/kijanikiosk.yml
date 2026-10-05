@@ -1,0 +1,170 @@
+---
+# =============================================================================
+# Values shared by ALL KijaniKiosk servers.
+# Anything that differs per server lives in host_vars/<hostname>.yml.
+# =============================================================================
+
+# --- Connection (Challenge B: must match the key Terraform installed) --------
+ansible_user: ubuntu
+ansible_ssh_private_key_file: ~/.ssh/kijanikiosk
+
+kk_environment: staging
+kk_app_base: /opt/kijanikiosk
+kk_group: kijanikiosk
+
+# --- Peer addresses, looked up from the generated inventory (never hardcoded) -
+kk_hosts: "{{ groups['kijanikiosk'] | map('extract', hostvars) | list }}"
+kk_api_ip: "{{ kk_hosts | selectattr('server_role', 'eq', 'api') | map(attribute='ansible_host') | first }}"
+kk_payments_ip: "{{ kk_hosts | selectattr('server_role', 'eq', 'payments') | map(attribute='ansible_host') | first }}"
+kk_logs_ip: "{{ kk_hosts | selectattr('server_role', 'eq', 'logs') | map(attribute='ansible_host') | first }}"
+kk_monitoring_cidr: 10.0.1.0/24
+
+# =============================================================================
+# Phase 1: Packages
+# =============================================================================
+kk_base_packages:
+  - curl
+  - gnupg
+  - acl
+  - ufw
+  - jq
+  - python3-debian   # needed by Ansible's deb822_repository module
+
+kk_node_major: "24"
+kk_nodesource_key_url: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
+kk_nodesource_key_path: /etc/apt/keyrings/nodesource.asc
+kk_nodesource_uri: "https://deb.nodesource.com/node_{{ kk_node_major }}.x"
+
+# Ubuntu 22.04's own nginx, pinned to the 1.18 series (security patches still apply)
+kk_nginx_version: "1.18.*"
+
+# Packages this playbook holds; any OTHER hold found is treated as drift and removed
+kk_held_packages:
+  - nodejs
+  - nginx
+
+# =============================================================================
+# Phase 2: Service accounts
+# =============================================================================
+kk_service_accounts:
+  - kk-api
+  - kk-payments
+  - kk-logs
+
+kk_nologin_shell: /usr/sbin/nologin
+kk_nonexistent_home: /nonexistent
+
+# =============================================================================
+# Phase 3: Directory structure and ACLs
+# =============================================================================
+kk_directories:
+  - { path: "{{ kk_app_base }}",             owner: root,        group: "{{ kk_group }}", mode: "0750" }
+  - { path: "{{ kk_app_base }}/api",         owner: kk-api,      group: kk-api,           mode: "0750" }
+  - { path: "{{ kk_app_base }}/payments",    owner: kk-payments, group: kk-payments,      mode: "0750" }
+  - { path: "{{ kk_app_base }}/logs",        owner: kk-logs,     group: kk-logs,          mode: "0750" }
+  - { path: "{{ kk_app_base }}/config",      owner: root,        group: "{{ kk_group }}", mode: "0750" }
+  - { path: "{{ kk_app_base }}/scripts",     owner: root,        group: root,             mode: "0750" }
+  - { path: "{{ kk_app_base }}/shared",      owner: root,        group: "{{ kk_group }}", mode: "0750" }
+  - { path: "{{ kk_app_base }}/shared/logs", owner: kk-logs,     group: kk-logs,          mode: "2770" }
+  - { path: "{{ kk_app_base }}/health",      owner: kk-logs,     group: "{{ kk_group }}", mode: "0750" }
+
+kk_shared_logs_dir: "{{ kk_app_base }}/shared/logs"
+kk_shared_log_acls:
+  - { entity: kk-api,      permissions: rwx }
+  - { entity: kk-payments, permissions: rx }
+
+# =============================================================================
+# Phase 4: Services (one per server; host_vars picks which via kk_role_service)
+# Config lives under /opt, NOT /etc, so ProtectSystem=strict cannot block it.
+# =============================================================================
+kk_unit_dir: /etc/systemd/system
+
+kk_services:
+  kk-api:
+    description: KijaniKiosk API service
+    user: kk-api
+    port: 3000
+    workdir: "{{ kk_app_base }}/api"
+    script: server.js
+    env_file: "{{ kk_app_base }}/config/db.env"
+    after: network.target
+    wants: ""
+    reload: false
+    profile: standard
+    env_vars:
+      DB_HOST: db.internal.example
+      DB_NAME: "kijanikiosk_{{ kk_environment }}"
+  kk-payments:
+    description: KijaniKiosk payments service
+    user: kk-payments
+    port: 3001
+    workdir: "{{ kk_app_base }}/payments"
+    script: processor.js
+    env_file: "{{ kk_app_base }}/config/payments-api.env"
+    # Week 3 used After/Wants=kk-api on the same machine. kk-api now runs on a
+    # different server, which systemd cannot depend on, so payments waits for
+    # the network instead.
+    after: network-online.target
+    wants: network-online.target
+    reload: false
+    profile: strict
+    env_vars:
+      PAYMENTS_MODE: sandbox
+      PAYMENTS_GATEWAY_URL: https://sandbox.payments.example
+  kk-logs:
+    description: KijaniKiosk log aggregator service
+    user: kk-logs
+    port: 3002
+    workdir: "{{ kk_app_base }}/logs"
+    script: aggregator.js
+    env_file: "{{ kk_app_base }}/config/db.env"
+    after: network.target
+    wants: ""
+    reload: true
+    profile: standard
+    env_vars:
+      DB_HOST: db.internal.example
+      DB_NAME: "kijanikiosk_{{ kk_environment }}"
+
+kk_node_binary: /usr/bin/node
+kk_bind_address: 0.0.0.0
+kk_restart_sec: 5
+kk_start_limit_interval: 60
+kk_start_limit_burst: 5
+
+# Requirement 5: kk-payments must score below this on systemd-analyze security
+kk_payments_max_exposure: 2.5
+
+# =============================================================================
+# Phase 5: Firewall (host-specific allow rules are in host_vars)
+# =============================================================================
+kk_ssh_port: 22
+kk_firewall_default_incoming: deny
+kk_firewall_default_outgoing: allow
+
+# =============================================================================
+# Phase 6: Journal persistence
+# =============================================================================
+kk_journal_dir: /var/log/journal
+kk_journald_dropin_dir: /etc/systemd/journald.conf.d
+kk_journald_dropin_file: "{{ kk_journald_dropin_dir }}/50-kijanikiosk.conf"
+kk_journal_storage: persistent
+kk_journal_max_use: 500M
+
+# =============================================================================
+# Phase 7: Logrotate
+# =============================================================================
+kk_logrotate_file: /etc/logrotate.d/kijanikiosk
+kk_logrotate_frequency: daily
+kk_logrotate_keep: 14
+kk_logrotate_owner: kk-logs
+kk_logrotate_group: "{{ kk_group }}"
+kk_logrotate_mode: "0640"
+
+# =============================================================================
+# nginx (only on servers where host_vars sets kk_install_nginx: true)
+# =============================================================================
+kk_nginx_site_file: /etc/nginx/sites-available/kijanikiosk
+kk_nginx_site_link: /etc/nginx/sites-enabled/kijanikiosk
+kk_nginx_default_site: /etc/nginx/sites-enabled/default
+kk_http_port: 80

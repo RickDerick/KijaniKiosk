@@ -1,0 +1,743 @@
+
+==== [2026-10-05 16:31:30] 0. Preflight checks (mode: multipass) ====
+Tools present, credentials set, MinIO reachable.
+
+==== [2026-10-05 16:31:30] 1. Terraform: init, plan, apply ====
+Initializing the backend...
+
+Initializing modules...
+
+Initializing provider plugins...
+- terraform.io/builtin/terraform is built in to Terraform
+- Reusing previous version of hashicorp/external from the dependency lock file
+- Using previously-installed hashicorp/external v2.4.2
+
+Terraform has been successfully initialized!
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # module.app_server["api"].data.external.vm_info will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "external" "vm_info" {
+      + id      = (known after apply)
+      + program = [
+          + "python3",
+          + "modules/app_server/get_vm_ip.py",
+        ]
+      + query   = {
+          + "name" = "kijanikiosk-api"
+        }
+      + result  = (known after apply)
+    }
+
+  # module.app_server["api"].terraform_data.vm will be created
+  + resource "terraform_data" "vm" {
+      + id               = (known after apply)
+      + input            = {
+          + cpus   = 1
+          + disk   = "8G"
+          + image  = "22.04"
+          + memory = "1G"
+          + name   = "kijanikiosk-api"
+        }
+      + output           = (known after apply)
+      + triggers_replace = {
+          + cpus   = 1
+          + disk   = "8G"
+          + image  = "22.04"
+          + key    = "395401998043ad328db5017ab94edfc8df7ffca0a6a87d9c946e57b925ace61e"
+          + memory = "1G"
+          + name   = "kijanikiosk-api"
+        }
+    }
+
+  # module.app_server["logs"].data.external.vm_info will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "external" "vm_info" {
+      + id      = (known after apply)
+      + program = [
+          + "python3",
+          + "modules/app_server/get_vm_ip.py",
+        ]
+      + query   = {
+          + "name" = "kijanikiosk-logs"
+        }
+      + result  = (known after apply)
+    }
+
+  # module.app_server["logs"].terraform_data.vm will be created
+  + resource "terraform_data" "vm" {
+      + id               = (known after apply)
+      + input            = {
+          + cpus   = 1
+          + disk   = "8G"
+          + image  = "22.04"
+          + memory = "1G"
+          + name   = "kijanikiosk-logs"
+        }
+      + output           = (known after apply)
+      + triggers_replace = {
+          + cpus   = 1
+          + disk   = "8G"
+          + image  = "22.04"
+          + key    = "395401998043ad328db5017ab94edfc8df7ffca0a6a87d9c946e57b925ace61e"
+          + memory = "1G"
+          + name   = "kijanikiosk-logs"
+        }
+    }
+
+  # module.app_server["payments"].data.external.vm_info will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "external" "vm_info" {
+      + id      = (known after apply)
+      + program = [
+          + "python3",
+          + "modules/app_server/get_vm_ip.py",
+        ]
+      + query   = {
+          + "name" = "kijanikiosk-payments"
+        }
+      + result  = (known after apply)
+    }
+
+  # module.app_server["payments"].terraform_data.vm will be created
+  + resource "terraform_data" "vm" {
+      + id               = (known after apply)
+      + input            = {
+          + cpus   = 1
+          + disk   = "8G"
+          + image  = "22.04"
+          + memory = "1G"
+          + name   = "kijanikiosk-payments"
+        }
+      + output           = (known after apply)
+      + triggers_replace = {
+          + cpus   = 1
+          + disk   = "8G"
+          + image  = "22.04"
+          + key    = "395401998043ad328db5017ab94edfc8df7ffca0a6a87d9c946e57b925ace61e"
+          + memory = "1G"
+          + name   = "kijanikiosk-payments"
+        }
+    }
+
+Plan: 3 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + ansible_inventory = (known after apply)
+  + server_ips        = {
+      + api      = (known after apply)
+      + logs     = (known after apply)
+      + payments = (known after apply)
+    }
+  + ssh_commands      = {
+      + api      = (known after apply)
+      + logs     = (known after apply)
+      + payments = (known after apply)
+    }
+module.app_server["api"].terraform_data.vm: Creating...
+module.app_server["payments"].terraform_data.vm: Creating...
+module.app_server["logs"].terraform_data.vm: Creating...
+module.app_server["api"].terraform_data.vm: Provisioning with 'local-exec'...
+module.app_server["logs"].terraform_data.vm: Provisioning with 'local-exec'...
+module.app_server["payments"].terraform_data.vm: Provisioning with 'local-exec'...
+module.app_server["api"].terraform_data.vm (local-exec): Executing: ["bash" "-c" "set -euo pipefail\nif multipass info kijanikiosk-api >/dev/null 2>&1; then\n  echo \"VM kijanikiosk-api already exists - not relaunching\"\nelse\n  multipass launch 22.04 \\\n    --name kijanikiosk-api \\\n    --cpus 1 \\\n    --memory 1G \\\n    --disk 8G\nfi\nmultipass exec kijanikiosk-api -- bash -c \\\n  \"grep -qxF 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJSItsR0mxpXMxnaKcauT0f8v3JyimI5qIrjHZiZ2SXB derickharon@derickharon' ~/.ssh/authorized_keys || echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJSItsR0mxpXMxnaKcauT0f8v3JyimI5qIrjHZiZ2SXB derickharon@derickharon' >> ~/.ssh/authorized_keys\"\n"]
+module.app_server["logs"].terraform_data.vm (local-exec): Executing: ["bash" "-c" "set -euo pipefail\nif multipass info kijanikiosk-logs >/dev/null 2>&1; then\n  echo \"VM kijanikiosk-logs already exists - not relaunching\"\nelse\n  multipass launch 22.04 \\\n    --name kijanikiosk-logs \\\n    --cpus 1 \\\n    --memory 1G \\\n    --disk 8G\nfi\nmultipass exec kijanikiosk-logs -- bash -c \\\n  \"grep -qxF 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJSItsR0mxpXMxnaKcauT0f8v3JyimI5qIrjHZiZ2SXB derickharon@derickharon' ~/.ssh/authorized_keys || echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJSItsR0mxpXMxnaKcauT0f8v3JyimI5qIrjHZiZ2SXB derickharon@derickharon' >> ~/.ssh/authorized_keys\"\n"]
+module.app_server["payments"].terraform_data.vm (local-exec): Executing: ["bash" "-c" "set -euo pipefail\nif multipass info kijanikiosk-payments >/dev/null 2>&1; then\n  echo \"VM kijanikiosk-payments already exists - not relaunching\"\nelse\n  multipass launch 22.04 \\\n    --name kijanikiosk-payments \\\n    --cpus 1 \\\n    --memory 1G \\\n    --disk 8G\nfi\nmultipass exec kijanikiosk-payments -- bash -c \\\n  \"grep -qxF 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJSItsR0mxpXMxnaKcauT0f8v3JyimI5qIrjHZiZ2SXB derickharon@derickharon' ~/.ssh/authorized_keys || echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJSItsR0mxpXMxnaKcauT0f8v3JyimI5qIrjHZiZ2SXB derickharon@derickharon' >> ~/.ssh/authorized_keys\"\n"]
+module.app_server["api"].terraform_data.vm (local-exec): [2K[0A[0E[2K[0A[0ECreating kijanikiosk-api  /-\|/-\|/-\|/-\|/
+module.app_server["api"].terraform_data.vm (local-exec): -\|/
+module.app_server["logs"].terraform_data.vm (local-exec): [2K[0A[0E[2K[0A[0ECreating kijanikiosk-logs  /-\|/-\|/-\|/-\|/-\|/-\|/-\ [2K[0A[0E[2K[0A[0EConfiguring kijanikiosk-logs  /-\|/ [2K[0A[0E[2K[0A[0EStarting kijanikiosk-logs  /-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/
+module.app_server["logs"].terraform_data.vm (local-exec): -\|/-
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|
+module.app_server["api"].terraform_data.vm (local-exec): -\|/-\|/-\| [2K[0A[0E[2K[0A[0EConfiguring kijanikiosk-api  /-\| [2K[0A[0E[2K[0A[0EStarting kijanikiosk-api  /-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\
+module.app_server["logs"].terraform_data.vm: Still creating... [00m10s elapsed]
+module.app_server["payments"].terraform_data.vm: Still creating... [00m10s elapsed]
+module.app_server["api"].terraform_data.vm: Still creating... [00m10s elapsed]
+module.app_server["logs"].terraform_data.vm (local-exec): /-\|/-\|/-\|/-
+module.app_server["api"].terraform_data.vm (local-exec): |/-\|/
+module.app_server["api"].terraform_data.vm (local-exec): -\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/
+module.app_server["payments"].terraform_data.vm (local-exec): [2K[0A[0E[2K[0A[0ECreating kijanikiosk-payments  /-\|/-\|/-\|/-\|/-\| [2K[0A[0E[2K[0A[0EConfiguring kijanikiosk-payments  /-\|/ [2K[0A[0E[2K[0A[0EStarting kijanikiosk-payments  /-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/
+module.app_server["logs"].terraform_data.vm (local-exec): -\|/
+module.app_server["logs"].terraform_data.vm (local-exec): -
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\
+module.app_server["logs"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): -\|/-\|/-\
+module.app_server["logs"].terraform_data.vm (local-exec): /-\|/
+module.app_server["logs"].terraform_data.vm (local-exec): -
+module.app_server["logs"].terraform_data.vm (local-exec): \|/
+module.app_server["logs"].terraform_data.vm (local-exec): -
+module.app_server["api"].terraform_data.vm: Still creating... [00m20s elapsed]
+module.app_server["payments"].terraform_data.vm: Still creating... [00m20s elapsed]
+module.app_server["logs"].terraform_data.vm: Still creating... [00m20s elapsed]
+module.app_server["api"].terraform_data.vm (local-exec): -\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-
+module.app_server["api"].terraform_data.vm (local-exec): |/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|
+module.app_server["api"].terraform_data.vm (local-exec): /
+module.app_server["api"].terraform_data.vm (local-exec): -
+module.app_server["api"].terraform_data.vm: Still creating... [00m30s elapsed]
+module.app_server["payments"].terraform_data.vm: Still creating... [00m30s elapsed]
+module.app_server["logs"].terraform_data.vm: Still creating... [00m30s elapsed]
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|
+module.app_server["logs"].terraform_data.vm (local-exec): /-\|/-\|/-\|/-\|/-
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|/-
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/ [2K[0A[0E[2K[0A[0EWaiting for initialization to complete  /-\|/-\|/-\|
+module.app_server["api"].terraform_data.vm (local-exec): \|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\ [2K[0A[0E[2K[0A[0EWaiting for initialization to complete  /-\|/-\|/-\|/-\|/-\
+module.app_server["api"].terraform_data.vm (local-exec): |/-
+module.app_server["api"].terraform_data.vm: Still creating... [00m40s elapsed]
+module.app_server["payments"].terraform_data.vm: Still creating... [00m40s elapsed]
+module.app_server["logs"].terraform_data.vm: Still creating... [00m40s elapsed]
+module.app_server["api"].terraform_data.vm (local-exec): \|/-\|
+module.app_server["api"].terraform_data.vm (local-exec): /-
+module.app_server["api"].terraform_data.vm (local-exec): \
+module.app_server["logs"].terraform_data.vm (local-exec): /-\|/-\|/-\|/-\|/-
+module.app_server["logs"].terraform_data.vm (local-exec): \|/
+module.app_server["api"].terraform_data.vm (local-exec): |/-\|/-
+module.app_server["payments"].terraform_data.vm (local-exec): /-\|/-\|/-\|/-\|/-\|/-\|/ [2K[0A[0E[2K[0A[0EWaiting for initialization to complete  /-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/
+module.app_server["logs"].terraform_data.vm (local-exec): -
+module.app_server["payments"].terraform_data.vm (local-exec): -\
+module.app_server["api"].terraform_data.vm (local-exec): \|/
+module.app_server["logs"].terraform_data.vm (local-exec): \|/
+module.app_server["logs"].terraform_data.vm (local-exec): -
+module.app_server["payments"].terraform_data.vm (local-exec): |/-
+module.app_server["payments"].terraform_data.vm (local-exec): \
+module.app_server["logs"].terraform_data.vm (local-exec): \|
+module.app_server["api"].terraform_data.vm (local-exec): -\|/
+module.app_server["payments"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): /
+module.app_server["payments"].terraform_data.vm (local-exec): -
+module.app_server["api"].terraform_data.vm (local-exec): -\|
+module.app_server["logs"].terraform_data.vm (local-exec): /-\|
+module.app_server["api"].terraform_data.vm (local-exec): /-
+module.app_server["logs"].terraform_data.vm (local-exec): /-
+module.app_server["payments"].terraform_data.vm (local-exec): \|/
+module.app_server["api"].terraform_data.vm (local-exec): \
+module.app_server["logs"].terraform_data.vm (local-exec): \
+module.app_server["api"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): -\
+module.app_server["logs"].terraform_data.vm (local-exec): |/
+module.app_server["logs"].terraform_data.vm (local-exec): -\
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\
+module.app_server["logs"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): /
+module.app_server["logs"].terraform_data.vm (local-exec): /-\
+module.app_server["payments"].terraform_data.vm (local-exec): -
+module.app_server["payments"].terraform_data.vm (local-exec): \|
+module.app_server["payments"].terraform_data.vm (local-exec): /
+module.app_server["payments"].terraform_data.vm (local-exec): -
+module.app_server["payments"].terraform_data.vm (local-exec): \|
+module.app_server["payments"].terraform_data.vm (local-exec): /
+module.app_server["payments"].terraform_data.vm (local-exec): -
+module.app_server["logs"].terraform_data.vm (local-exec): |/-\|/-\|/
+module.app_server["payments"].terraform_data.vm (local-exec): \|/-
+module.app_server["logs"].terraform_data.vm (local-exec): -\|/
+module.app_server["logs"].terraform_data.vm (local-exec): -
+module.app_server["payments"].terraform_data.vm (local-exec): \|/-
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|/-
+module.app_server["payments"].terraform_data.vm (local-exec): \|/-\|/-\
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\
+module.app_server["payments"].terraform_data.vm (local-exec): |/-
+module.app_server["payments"].terraform_data.vm (local-exec): \|/-
+module.app_server["payments"].terraform_data.vm (local-exec): \
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\|/-\
+module.app_server["logs"].terraform_data.vm (local-exec): |/-\|/-\|/-\|/-\|
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\|/-
+module.app_server["payments"].terraform_data.vm (local-exec): \|
+module.app_server["payments"].terraform_data.vm (local-exec): /
+module.app_server["payments"].terraform_data.vm (local-exec): -\
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\
+module.app_server["payments"].terraform_data.vm (local-exec): |/
+module.app_server["payments"].terraform_data.vm (local-exec): -\
+module.app_server["payments"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): /
+module.app_server["logs"].terraform_data.vm: Still creating... [00m50s elapsed]
+module.app_server["api"].terraform_data.vm: Still creating... [00m50s elapsed]
+module.app_server["payments"].terraform_data.vm: Still creating... [00m50s elapsed]
+module.app_server["payments"].terraform_data.vm (local-exec): -\
+module.app_server["payments"].terraform_data.vm (local-exec): |/-
+module.app_server["payments"].terraform_data.vm (local-exec): \
+module.app_server["payments"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): /-
+module.app_server["payments"].terraform_data.vm (local-exec): \
+module.app_server["payments"].terraform_data.vm (local-exec): |/
+module.app_server["payments"].terraform_data.vm (local-exec): -
+module.app_server["payments"].terraform_data.vm (local-exec): \
+module.app_server["payments"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): /
+module.app_server["api"].terraform_data.vm (local-exec): /-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|
+module.app_server["payments"].terraform_data.vm (local-exec): -\|/-\|/-\|
+module.app_server["payments"].terraform_data.vm (local-exec): /-
+module.app_server["logs"].terraform_data.vm (local-exec): /-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-
+module.app_server["payments"].terraform_data.vm (local-exec): \|/
+module.app_server["payments"].terraform_data.vm (local-exec): -
+module.app_server["payments"].terraform_data.vm (local-exec): \|
+module.app_server["payments"].terraform_data.vm (local-exec): /
+module.app_server["payments"].terraform_data.vm (local-exec): -\
+module.app_server["payments"].terraform_data.vm (local-exec): |/
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|/-\|
+module.app_server["logs"].terraform_data.vm (local-exec): /-
+module.app_server["logs"].terraform_data.vm (local-exec): \|
+module.app_server["logs"].terraform_data.vm (local-exec): /-
+module.app_server["logs"].terraform_data.vm (local-exec): \|
+module.app_server["logs"].terraform_data.vm (local-exec): /
+module.app_server["logs"].terraform_data.vm (local-exec): -\
+module.app_server["logs"].terraform_data.vm (local-exec): |
+module.app_server["logs"].terraform_data.vm (local-exec): /
+module.app_server["logs"].terraform_data.vm (local-exec): -
+module.app_server["logs"].terraform_data.vm (local-exec): \
+module.app_server["logs"].terraform_data.vm (local-exec): |/-
+module.app_server["logs"].terraform_data.vm (local-exec): \|
+module.app_server["logs"].terraform_data.vm (local-exec): /-\
+module.app_server["payments"].terraform_data.vm (local-exec): -\|/-\|/-\|/-\|/-\|/-\|/-
+module.app_server["logs"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): \|
+module.app_server["logs"].terraform_data.vm (local-exec): /-\
+module.app_server["payments"].terraform_data.vm (local-exec): /-\
+module.app_server["payments"].terraform_data.vm (local-exec): |/-
+module.app_server["logs"].terraform_data.vm (local-exec): |/-\|/
+module.app_server["logs"].terraform_data.vm (local-exec): -\
+module.app_server["logs"].terraform_data.vm (local-exec): |/-\
+module.app_server["logs"].terraform_data.vm (local-exec): |
+module.app_server["logs"].terraform_data.vm (local-exec): /-
+module.app_server["logs"].terraform_data.vm (local-exec): \
+module.app_server["payments"].terraform_data.vm (local-exec): \|/-\|/-\|/-\|/
+module.app_server["payments"].terraform_data.vm (local-exec): -\
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\
+module.app_server["logs"].terraform_data.vm (local-exec): |/-\|/-\|/-
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\
+module.app_server["payments"].terraform_data.vm (local-exec): |/
+module.app_server["api"].terraform_data.vm: Still creating... [01m00s elapsed]
+module.app_server["logs"].terraform_data.vm: Still creating... [01m00s elapsed]
+module.app_server["payments"].terraform_data.vm: Still creating... [01m00s elapsed]
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|/-
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|
+module.app_server["logs"].terraform_data.vm (local-exec): /-
+module.app_server["logs"].terraform_data.vm (local-exec): \
+module.app_server["logs"].terraform_data.vm (local-exec): |/
+module.app_server["logs"].terraform_data.vm (local-exec): -\
+module.app_server["logs"].terraform_data.vm (local-exec): |
+module.app_server["logs"].terraform_data.vm (local-exec): /-
+module.app_server["logs"].terraform_data.vm (local-exec): \
+module.app_server["logs"].terraform_data.vm (local-exec): |/-\
+module.app_server["payments"].terraform_data.vm (local-exec): -\|/-\|/-\|/-\|/-\|/-\|/-
+module.app_server["logs"].terraform_data.vm (local-exec): |
+module.app_server["logs"].terraform_data.vm (local-exec): /
+module.app_server["logs"].terraform_data.vm (local-exec): -\|/
+module.app_server["logs"].terraform_data.vm (local-exec): -\
+module.app_server["logs"].terraform_data.vm (local-exec): |
+module.app_server["logs"].terraform_data.vm (local-exec): /-\
+module.app_server["logs"].terraform_data.vm (local-exec): |
+module.app_server["logs"].terraform_data.vm (local-exec): /
+module.app_server["logs"].terraform_data.vm (local-exec): -
+module.app_server["logs"].terraform_data.vm (local-exec): \|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-
+module.app_server["logs"].terraform_data.vm: Still creating... [01m10s elapsed]
+module.app_server["payments"].terraform_data.vm: Still creating... [01m10s elapsed]
+module.app_server["api"].terraform_data.vm: Still creating... [01m10s elapsed]
+module.app_server["logs"].terraform_data.vm (local-exec): \|
+module.app_server["logs"].terraform_data.vm (local-exec): /
+module.app_server["logs"].terraform_data.vm (local-exec): -\
+module.app_server["payments"].terraform_data.vm (local-exec): \|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|
+module.app_server["api"].terraform_data.vm (local-exec): /-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-
+module.app_server["logs"].terraform_data.vm (local-exec): |/-
+module.app_server["logs"].terraform_data.vm (local-exec): \
+module.app_server["logs"].terraform_data.vm (local-exec): |/
+module.app_server["payments"].terraform_data.vm (local-exec): /-\|/-
+module.app_server["logs"].terraform_data.vm (local-exec): -\|/
+module.app_server["payments"].terraform_data.vm (local-exec): \|/
+module.app_server["logs"].terraform_data.vm (local-exec): -
+module.app_server["logs"].terraform_data.vm (local-exec): \
+module.app_server["api"].terraform_data.vm (local-exec): \|/-\|/-\|
+module.app_server["logs"].terraform_data.vm (local-exec): |/-
+module.app_server["logs"].terraform_data.vm (local-exec): \|
+module.app_server["payments"].terraform_data.vm (local-exec): -\|/-\|/
+module.app_server["logs"].terraform_data.vm (local-exec): /-\
+module.app_server["payments"].terraform_data.vm (local-exec): -\|/-
+module.app_server["payments"].terraform_data.vm (local-exec): \|
+module.app_server["logs"].terraform_data.vm (local-exec): |/-\|/-\
+module.app_server["payments"].terraform_data.vm (local-exec): /-\|
+module.app_server["payments"].terraform_data.vm (local-exec): /
+module.app_server["payments"].terraform_data.vm (local-exec): -\
+module.app_server["payments"].terraform_data.vm (local-exec): |/
+module.app_server["payments"].terraform_data.vm (local-exec): -\
+module.app_server["payments"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): /-
+module.app_server["payments"].terraform_data.vm (local-exec): \
+module.app_server["payments"].terraform_data.vm (local-exec): |
+module.app_server["payments"].terraform_data.vm (local-exec): /-
+module.app_server["payments"].terraform_data.vm (local-exec): \|/-\
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\|/-
+module.app_server["payments"].terraform_data.vm (local-exec): \|/-
+module.app_server["payments"].terraform_data.vm (local-exec): \|
+module.app_server["payments"].terraform_data.vm (local-exec): /-\|/
+module.app_server["payments"].terraform_data.vm (local-exec): -\|/-
+module.app_server["payments"].terraform_data.vm (local-exec): \
+module.app_server["logs"].terraform_data.vm (local-exec): |/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/ [2K[0A[0ELaunched: kijanikiosk-logs
+module.app_server["logs"].terraform_data.vm (local-exec): [2K[0A[0E
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\|/-\|/
+module.app_server["logs"].terraform_data.vm: Creation complete after 1m18s [id=db699f97-7c8b-d1c4-93c0-d3fd03109413]
+module.app_server["payments"].terraform_data.vm (local-exec): -\|/-\|/-\|/-
+module.app_server["payments"].terraform_data.vm: Still creating... [01m20s elapsed]
+module.app_server["api"].terraform_data.vm: Still creating... [01m20s elapsed]
+module.app_server["api"].terraform_data.vm (local-exec): /-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\| [2K[0A[0ELaunched: kijanikiosk-api
+module.app_server["payments"].terraform_data.vm (local-exec): \|/-\|/-\|/-\
+module.app_server["api"].terraform_data.vm (local-exec): [2K[0A[0E
+module.app_server["api"].terraform_data.vm: Creation complete after 1m21s [id=3e4a10d7-3b19-6418-6feb-fb9cff7fed59]
+module.app_server["payments"].terraform_data.vm (local-exec): |/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\ [2K[0A[0ELaunched: kijanikiosk-payments
+module.app_server["payments"].terraform_data.vm (local-exec): [2K[0A[0E
+module.app_server["payments"].terraform_data.vm: Creation complete after 1m27s [id=38b7083e-0f7b-5f44-46f3-c09c03565049]
+module.app_server["api"].data.external.vm_info: Reading...
+module.app_server["logs"].data.external.vm_info: Reading...
+module.app_server["payments"].data.external.vm_info: Reading...
+module.app_server["api"].data.external.vm_info: Read complete after 0s [id=-]
+module.app_server["logs"].data.external.vm_info: Read complete after 1s [id=-]
+module.app_server["payments"].data.external.vm_info: Read complete after 1s [id=-]
+
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+ansible_inventory = <<EOT
+# GENERATED by pipeline.sh from terraform output - do not edit by hand
+[kijanikiosk]
+kijanikiosk-api ansible_host=10.156.170.252 server_role=api
+kijanikiosk-logs ansible_host=10.156.170.116 server_role=logs
+kijanikiosk-payments ansible_host=10.156.170.117 server_role=payments
+
+EOT
+server_ips = {
+  "api" = "10.156.170.252"
+  "logs" = "10.156.170.116"
+  "payments" = "10.156.170.117"
+}
+ssh_commands = {
+  "api" = "ssh -i ~/.ssh/kijanikiosk ubuntu@10.156.170.252"
+  "logs" = "ssh -i ~/.ssh/kijanikiosk ubuntu@10.156.170.116"
+  "payments" = "ssh -i ~/.ssh/kijanikiosk ubuntu@10.156.170.117"
+}
+
+==== [2026-10-05 16:32:59] 2. Write Ansible inventory from Terraform output ====
+  kijanikiosk-api 10.156.170.252
+  kijanikiosk-logs 10.156.170.116
+  kijanikiosk-payments 10.156.170.117
+
+==== [2026-10-05 16:32:59] 3. Verify IPs and SSH host keys ====
+  kijanikiosk-api 10.156.170.252: IP matches Multipass, host key fetched out-of-band
+  kijanikiosk-logs 10.156.170.116: IP matches Multipass, host key fetched out-of-band
+  kijanikiosk-payments 10.156.170.117: IP matches Multipass, host key fetched out-of-band
+
+==== [2026-10-05 16:33:02] 4. Ansible: collections, connectivity, playbook ====
+  collection ansible.posix already installed
+  collection community.general already installed
+kijanikiosk-logs | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3.10"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+kijanikiosk-api | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3.10"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+kijanikiosk-payments | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3.10"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+PLAY [Configure KijaniKiosk servers] *******************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [kijanikiosk-payments]
+ok: [kijanikiosk-api]
+ok: [kijanikiosk-logs]
+
+TASK [Phase 1 | Install base packages] *****************************************
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-logs]
+
+TASK [Phase 1 | Read current package holds] ************************************
+ok: [kijanikiosk-api]
+ok: [kijanikiosk-payments]
+ok: [kijanikiosk-logs]
+
+TASK [Phase 1 | Remove holds this playbook does not own (drift)] ***************
+skipping: [kijanikiosk-api]
+skipping: [kijanikiosk-logs]
+skipping: [kijanikiosk-payments]
+
+TASK [Phase 1 | Add NodeSource signing key] ************************************
+[WARNING]: Module remote_tmp /root/.ansible/tmp did not exist and was created with a mode of 0700, this may cause issues when running as another user. To avoid this, create the remote_tmp dir with the correct permissions manually
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 1 | Add NodeSource repository] *************************************
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-logs]
+
+TASK [Phase 1 | Refresh package lists if the repository was just added] ********
+
+TASK [Phase 1 | Refresh package lists if the repository was just added] ********
+
+TASK [Phase 1 | Refresh package lists if the repository was just added] ********
+
+RUNNING HANDLER [Refresh apt cache] ********************************************
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 1 | Install Node.js] ***********************************************
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-payments]
+
+TASK [Phase 1 | Install pinned nginx] ******************************************
+skipping: [kijanikiosk-logs]
+skipping: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 1 | Hold pinned packages] ******************************************
+changed: [kijanikiosk-api] => (item=nodejs)
+changed: [kijanikiosk-logs] => (item=nodejs)
+skipping: [kijanikiosk-logs] => (item=nginx) 
+changed: [kijanikiosk-payments] => (item=nodejs)
+skipping: [kijanikiosk-payments] => (item=nginx) 
+changed: [kijanikiosk-api] => (item=nginx)
+
+TASK [Phase 2 | Create shared group] *******************************************
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-logs]
+
+TASK [Phase 2 | Create a private group per service account] ********************
+changed: [kijanikiosk-logs] => (item=kk-api)
+changed: [kijanikiosk-api] => (item=kk-api)
+changed: [kijanikiosk-payments] => (item=kk-api)
+changed: [kijanikiosk-payments] => (item=kk-payments)
+changed: [kijanikiosk-api] => (item=kk-payments)
+changed: [kijanikiosk-logs] => (item=kk-payments)
+changed: [kijanikiosk-api] => (item=kk-logs)
+changed: [kijanikiosk-payments] => (item=kk-logs)
+changed: [kijanikiosk-logs] => (item=kk-logs)
+
+TASK [Phase 2 | Create non-login service accounts] *****************************
+changed: [kijanikiosk-logs] => (item=kk-api)
+changed: [kijanikiosk-api] => (item=kk-api)
+changed: [kijanikiosk-payments] => (item=kk-api)
+changed: [kijanikiosk-logs] => (item=kk-payments)
+changed: [kijanikiosk-payments] => (item=kk-payments)
+changed: [kijanikiosk-api] => (item=kk-payments)
+changed: [kijanikiosk-logs] => (item=kk-logs)
+changed: [kijanikiosk-payments] => (item=kk-logs)
+changed: [kijanikiosk-api] => (item=kk-logs)
+
+TASK [Phase 3 | Create directories with owners and modes] **********************
+changed: [kijanikiosk-api] => (item={'path': '/opt/kijanikiosk', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-payments] => (item={'path': '/opt/kijanikiosk', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-logs] => (item={'path': '/opt/kijanikiosk', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-api] => (item={'path': '/opt/kijanikiosk/api', 'owner': 'kk-api', 'group': 'kk-api', 'mode': '0750'})
+changed: [kijanikiosk-logs] => (item={'path': '/opt/kijanikiosk/api', 'owner': 'kk-api', 'group': 'kk-api', 'mode': '0750'})
+changed: [kijanikiosk-payments] => (item={'path': '/opt/kijanikiosk/api', 'owner': 'kk-api', 'group': 'kk-api', 'mode': '0750'})
+changed: [kijanikiosk-api] => (item={'path': '/opt/kijanikiosk/payments', 'owner': 'kk-payments', 'group': 'kk-payments', 'mode': '0750'})
+changed: [kijanikiosk-api] => (item={'path': '/opt/kijanikiosk/logs', 'owner': 'kk-logs', 'group': 'kk-logs', 'mode': '0750'})
+changed: [kijanikiosk-logs] => (item={'path': '/opt/kijanikiosk/payments', 'owner': 'kk-payments', 'group': 'kk-payments', 'mode': '0750'})
+changed: [kijanikiosk-payments] => (item={'path': '/opt/kijanikiosk/payments', 'owner': 'kk-payments', 'group': 'kk-payments', 'mode': '0750'})
+changed: [kijanikiosk-api] => (item={'path': '/opt/kijanikiosk/config', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-logs] => (item={'path': '/opt/kijanikiosk/logs', 'owner': 'kk-logs', 'group': 'kk-logs', 'mode': '0750'})
+changed: [kijanikiosk-api] => (item={'path': '/opt/kijanikiosk/scripts', 'owner': 'root', 'group': 'root', 'mode': '0750'})
+changed: [kijanikiosk-payments] => (item={'path': '/opt/kijanikiosk/logs', 'owner': 'kk-logs', 'group': 'kk-logs', 'mode': '0750'})
+changed: [kijanikiosk-api] => (item={'path': '/opt/kijanikiosk/shared', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-logs] => (item={'path': '/opt/kijanikiosk/config', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-api] => (item={'path': '/opt/kijanikiosk/shared/logs', 'owner': 'kk-logs', 'group': 'kk-logs', 'mode': '2770'})
+changed: [kijanikiosk-payments] => (item={'path': '/opt/kijanikiosk/config', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-logs] => (item={'path': '/opt/kijanikiosk/scripts', 'owner': 'root', 'group': 'root', 'mode': '0750'})
+changed: [kijanikiosk-api] => (item={'path': '/opt/kijanikiosk/health', 'owner': 'kk-logs', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-payments] => (item={'path': '/opt/kijanikiosk/scripts', 'owner': 'root', 'group': 'root', 'mode': '0750'})
+changed: [kijanikiosk-logs] => (item={'path': '/opt/kijanikiosk/shared', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-payments] => (item={'path': '/opt/kijanikiosk/shared', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-logs] => (item={'path': '/opt/kijanikiosk/shared/logs', 'owner': 'kk-logs', 'group': 'kk-logs', 'mode': '2770'})
+changed: [kijanikiosk-logs] => (item={'path': '/opt/kijanikiosk/health', 'owner': 'kk-logs', 'group': 'kijanikiosk', 'mode': '0750'})
+changed: [kijanikiosk-payments] => (item={'path': '/opt/kijanikiosk/shared/logs', 'owner': 'kk-logs', 'group': 'kk-logs', 'mode': '2770'})
+changed: [kijanikiosk-payments] => (item={'path': '/opt/kijanikiosk/health', 'owner': 'kk-logs', 'group': 'kijanikiosk', 'mode': '0750'})
+
+TASK [Phase 3 | Set access ACLs on shared logs] ********************************
+changed: [kijanikiosk-logs] => (item={'entity': 'kk-api', 'permissions': 'rwx'})
+changed: [kijanikiosk-payments] => (item={'entity': 'kk-api', 'permissions': 'rwx'})
+changed: [kijanikiosk-api] => (item={'entity': 'kk-api', 'permissions': 'rwx'})
+changed: [kijanikiosk-logs] => (item={'entity': 'kk-payments', 'permissions': 'rx'})
+changed: [kijanikiosk-payments] => (item={'entity': 'kk-payments', 'permissions': 'rx'})
+changed: [kijanikiosk-api] => (item={'entity': 'kk-payments', 'permissions': 'rx'})
+
+TASK [Phase 3 | Set default ACLs on shared logs (inherited by new files)] ******
+changed: [kijanikiosk-logs] => (item={'entity': 'kk-api', 'permissions': 'rwx'})
+changed: [kijanikiosk-api] => (item={'entity': 'kk-api', 'permissions': 'rwx'})
+changed: [kijanikiosk-payments] => (item={'entity': 'kk-api', 'permissions': 'rwx'})
+changed: [kijanikiosk-api] => (item={'entity': 'kk-payments', 'permissions': 'rx'})
+changed: [kijanikiosk-logs] => (item={'entity': 'kk-payments', 'permissions': 'rx'})
+changed: [kijanikiosk-payments] => (item={'entity': 'kk-payments', 'permissions': 'rx'})
+
+TASK [Phase 3 | Deploy service environment file (under /opt, readable by group)] ***
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 4 | Deploy placeholder application] ********************************
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-payments]
+
+TASK [Phase 4 | Deploy hardened systemd unit] **********************************
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-payments]
+
+TASK [Phase 4 | Apply pending systemd reload before starting] ******************
+
+TASK [Phase 4 | Apply pending systemd reload before starting] ******************
+
+TASK [Phase 4 | Apply pending systemd reload before starting] ******************
+
+RUNNING HANDLER [Reload systemd] ***********************************************
+ok: [kijanikiosk-api]
+ok: [kijanikiosk-logs]
+ok: [kijanikiosk-payments]
+
+RUNNING HANDLER [Restart role service] *****************************************
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-payments]
+
+TASK [Phase 4 | Enable and start the role service] *****************************
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 4 | Deploy nginx site (API server only)] ***************************
+skipping: [kijanikiosk-logs]
+skipping: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 4 | Enable nginx site] *********************************************
+skipping: [kijanikiosk-logs]
+skipping: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 4 | Disable nginx default site] ************************************
+skipping: [kijanikiosk-logs]
+skipping: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 5 | Allow required ports (SSH first, so we never lock ourselves out)] ***
+changed: [kijanikiosk-api] => (item={'port': 22, 'from': 'any', 'comment': 'SSH admin access'})
+changed: [kijanikiosk-payments] => (item={'port': 22, 'from': 'any', 'comment': 'SSH admin access'})
+changed: [kijanikiosk-logs] => (item={'port': 22, 'from': 'any', 'comment': 'SSH admin access'})
+changed: [kijanikiosk-api] => (item={'port': 80, 'from': 'any', 'comment': 'HTTP public web via nginx'})
+changed: [kijanikiosk-logs] => (item={'port': '3002', 'from': '10.156.170.252', 'comment': 'log shipping from the API server'})
+changed: [kijanikiosk-payments] => (item={'port': '3001', 'from': '10.156.170.252', 'comment': 'payments calls from the API server only'})
+changed: [kijanikiosk-api] => (item={'port': '3000', 'from': '10.0.1.0/24', 'comment': 'api health check from monitoring subnet'})
+changed: [kijanikiosk-payments] => (item={'port': '3001', 'from': '10.0.1.0/24', 'comment': 'payments health check from monitoring subnet'})
+changed: [kijanikiosk-logs] => (item={'port': '3002', 'from': '10.156.170.117', 'comment': 'log shipping from the payments server'})
+changed: [kijanikiosk-logs] => (item={'port': '3002', 'from': '10.0.1.0/24', 'comment': 'logs health check from monitoring subnet'})
+
+TASK [Phase 5 | Default policy for incoming traffic] ***************************
+ok: [kijanikiosk-logs]
+ok: [kijanikiosk-payments]
+ok: [kijanikiosk-api]
+
+TASK [Phase 5 | Default policy for outgoing traffic] ***************************
+ok: [kijanikiosk-logs]
+ok: [kijanikiosk-api]
+ok: [kijanikiosk-payments]
+
+TASK [Phase 5 | Enable firewall] ***********************************************
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 6 | Create persistent journal directory] ***************************
+ok: [kijanikiosk-payments]
+ok: [kijanikiosk-logs]
+ok: [kijanikiosk-api]
+
+TASK [Phase 6 | Create journald drop-in directory] *****************************
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-payments]
+
+TASK [Phase 6 | Configure persistent, size-capped journal] *********************
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+
+TASK [Phase 7 | Configure log rotation for shared logs] ************************
+changed: [kijanikiosk-payments]
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-logs]
+
+TASK [Verify | Run any pending handlers before checking] ***********************
+
+TASK [Verify | Run any pending handlers before checking] ***********************
+
+TASK [Verify | Run any pending handlers before checking] ***********************
+
+RUNNING HANDLER [Restart journald] *********************************************
+changed: [kijanikiosk-logs]
+changed: [kijanikiosk-api]
+changed: [kijanikiosk-payments]
+
+RUNNING HANDLER [Reload nginx] *************************************************
+changed: [kijanikiosk-api]
+
+TASK [Verify | Role service answers on its port] *******************************
+ok: [kijanikiosk-logs]
+ok: [kijanikiosk-payments]
+ok: [kijanikiosk-api]
+
+TASK [Verify | Challenge D - payments account can read its environment file] ***
+skipping: [kijanikiosk-api]
+skipping: [kijanikiosk-logs]
+ok: [kijanikiosk-payments]
+
+TASK [Verify | Read kk-payments security exposure score] ***********************
+skipping: [kijanikiosk-api]
+skipping: [kijanikiosk-logs]
+ok: [kijanikiosk-payments]
+
+TASK [Verify | Requirement 5 - kk-payments scores below the target] ************
+skipping: [kijanikiosk-api]
+skipping: [kijanikiosk-logs]
+ok: [kijanikiosk-payments] => {
+    "changed": false,
+    "msg": "kk-payments exposure 1.5 (target below 2.5)"
+}
+
+PLAY RECAP *********************************************************************
+kijanikiosk-api            : ok=35   changed=28   unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+kijanikiosk-logs           : ok=30   changed=23   unreachable=0    failed=0    skipped=8    rescued=0    ignored=0   
+kijanikiosk-payments       : ok=33   changed=23   unreachable=0    failed=0    skipped=5    rescued=0    ignored=0   
+
+
+==== [2026-10-05 16:34:54] 5. Done ====
+Generated inventory (/home/derickharon/Moringa/DevOps15/KijaniKiosk/week4/friday/ansible/inventory.ini):
+# GENERATED by pipeline.sh from terraform output - do not edit by hand
+[kijanikiosk]
+kijanikiosk-api ansible_host=10.156.170.252 server_role=api
+kijanikiosk-logs ansible_host=10.156.170.116 server_role=logs
+kijanikiosk-payments ansible_host=10.156.170.117 server_role=payments
+
+PIPELINE SUCCEEDED

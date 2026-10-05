@@ -1,0 +1,4 @@
+# Collections used by the playbook (installed by pipeline.sh)
+collections:
+  - name: ansible.posix      # acl module
+  - name: community.general  # ufw module

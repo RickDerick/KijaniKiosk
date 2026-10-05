@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+{{ kk_shared_logs_dir }}/*.log {
+    {{ kk_logrotate_frequency }}
+    rotate {{ kk_logrotate_keep }}
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+    su {{ kk_logrotate_owner }} {{ kk_logrotate_group }}
+    create {{ kk_logrotate_mode }} {{ kk_logrotate_owner }} {{ kk_logrotate_group }}
+}

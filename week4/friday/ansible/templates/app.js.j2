@@ -1,0 +1,24 @@
+// {{ ansible_managed }}
+// Placeholder {{ kk_role_service }} application so the hardened unit can be
+// proven to START, not just to score well. Replaced by real code in Week 5.
+const http = require('http');
+
+const service = process.env.SERVICE_NAME;
+const port = Number(process.env.PORT);
+const bind = process.env.BIND_ADDRESS;
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({
+    service,
+    status: 'ok',
+    environment: process.env.NODE_ENV,
+  }));
+});
+
+// systemd's ExecReload sends SIGHUP; handle it instead of exiting
+process.on('SIGHUP', () => console.log(`${service}: reload requested`));
+
+server.listen(port, bind, () => {
+  console.log(`${service} listening on ${bind}:${port}`);
+});

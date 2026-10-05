@@ -1,0 +1,337 @@
+---
+# =============================================================================
+# KijaniKiosk server configuration (Week 4 Friday)
+# Converts a blank Ubuntu 22.04 server into the Week 3 secure baseline.
+# Every value comes from group_vars/ or host_vars/; nothing is hardcoded here.
+# A second run must report changed=0 on every host.
+# =============================================================================
+- name: Configure KijaniKiosk servers
+  hosts: kijanikiosk
+  become: true
+
+  vars:
+    svc: "{{ kk_services[kk_role_service] }}"
+
+  handlers:
+    - name: Refresh apt cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Reload systemd
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+
+    - name: Restart role service
+      ansible.builtin.systemd_service:
+        name: "{{ kk_role_service }}"
+        state: restarted
+        daemon_reload: true
+
+    - name: Restart journald
+      ansible.builtin.systemd_service:
+        name: systemd-journald
+        state: restarted
+
+    - name: Reload nginx
+      ansible.builtin.systemd_service:
+        name: nginx
+        state: reloaded
+
+  tasks:
+    # =========================================================================
+    # Phase 1: Packages (pinned, held, drift removed)
+    # =========================================================================
+    - name: "Phase 1 | Install base packages"
+      ansible.builtin.apt:
+        name: "{{ kk_base_packages }}"
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+        install_recommends: false
+
+    - name: "Phase 1 | Read current package holds"
+      ansible.builtin.command: apt-mark showhold
+      register: kk_current_holds
+      changed_when: false
+      check_mode: false
+
+    - name: "Phase 1 | Remove holds this playbook does not own (drift)"
+      ansible.builtin.dpkg_selections:
+        name: "{{ item }}"
+        selection: install
+      loop: "{{ kk_current_holds.stdout_lines | difference(kk_held_packages) }}"
+
+    - name: "Phase 1 | Add NodeSource signing key"
+      ansible.builtin.get_url:
+        url: "{{ kk_nodesource_key_url }}"
+        dest: "{{ kk_nodesource_key_path }}"
+        mode: "0644"
+
+    - name: "Phase 1 | Add NodeSource repository"
+      ansible.builtin.deb822_repository:
+        name: nodesource
+        types: deb
+        uris: "{{ kk_nodesource_uri }}"
+        suites: nodistro
+        components: main
+        signed_by: "{{ kk_nodesource_key_path }}"
+        state: present
+      notify: Refresh apt cache
+
+    - name: "Phase 1 | Refresh package lists if the repository was just added"
+      ansible.builtin.meta: flush_handlers
+
+    - name: "Phase 1 | Install Node.js"
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+        install_recommends: false
+
+    - name: "Phase 1 | Install pinned nginx"
+      ansible.builtin.apt:
+        name: "nginx={{ kk_nginx_version }}"
+        state: present
+        install_recommends: false
+      when: kk_install_nginx
+
+    - name: "Phase 1 | Hold pinned packages"
+      ansible.builtin.dpkg_selections:
+        name: "{{ item }}"
+        selection: hold
+      loop: "{{ kk_held_packages }}"
+      when: item != 'nginx' or kk_install_nginx
+
+    # =========================================================================
+    # Phase 2: Service accounts
+    # =========================================================================
+    - name: "Phase 2 | Create shared group"
+      ansible.builtin.group:
+        name: "{{ kk_group }}"
+        system: true
+        state: present
+
+    - name: "Phase 2 | Create a private group per service account"
+      ansible.builtin.group:
+        name: "{{ item }}"
+        system: true
+        state: present
+      loop: "{{ kk_service_accounts }}"
+
+    - name: "Phase 2 | Create non-login service accounts"
+      ansible.builtin.user:
+        name: "{{ item }}"
+        group: "{{ item }}"
+        groups: "{{ kk_group }}"
+        append: true
+        system: true
+        create_home: false
+        home: "{{ kk_nonexistent_home }}"
+        shell: "{{ kk_nologin_shell }}"
+        comment: "KijaniKiosk {{ item }} service account"
+      loop: "{{ kk_service_accounts }}"
+
+    # =========================================================================
+    # Phase 3: Directory structure, ownership, modes, ACLs
+    # =========================================================================
+    - name: "Phase 3 | Create directories with owners and modes"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: "{{ item.mode }}"
+      loop: "{{ kk_directories }}"
+
+    - name: "Phase 3 | Set access ACLs on shared logs"
+      ansible.posix.acl:
+        path: "{{ kk_shared_logs_dir }}"
+        entity: "{{ item.entity }}"
+        etype: user
+        permissions: "{{ item.permissions }}"
+        state: present
+      loop: "{{ kk_shared_log_acls }}"
+
+    - name: "Phase 3 | Set default ACLs on shared logs (inherited by new files)"
+      ansible.posix.acl:
+        path: "{{ kk_shared_logs_dir }}"
+        entity: "{{ item.entity }}"
+        etype: user
+        permissions: "{{ item.permissions }}"
+        default: true
+        state: present
+      loop: "{{ kk_shared_log_acls }}"
+
+    - name: "Phase 3 | Deploy service environment file (under /opt, readable by group)"
+      ansible.builtin.template:
+        src: service.env.j2
+        dest: "{{ svc.env_file }}"
+        owner: root
+        group: "{{ kk_group }}"
+        mode: "0640"
+      notify: Restart role service
+
+    # =========================================================================
+    # Phase 4: systemd unit (hardened) and placeholder application
+    # =========================================================================
+    - name: "Phase 4 | Deploy placeholder application"
+      ansible.builtin.template:
+        src: app.js.j2
+        dest: "{{ svc.workdir }}/{{ svc.script }}"
+        owner: root
+        group: "{{ svc.user }}"
+        mode: "0640"
+      notify: Restart role service
+
+    - name: "Phase 4 | Deploy hardened systemd unit"
+      ansible.builtin.template:
+        src: kk-service.service.j2
+        dest: "{{ kk_unit_dir }}/{{ kk_role_service }}.service"
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Reload systemd
+        - Restart role service
+
+    - name: "Phase 4 | Apply pending systemd reload before starting"
+      ansible.builtin.meta: flush_handlers
+
+    - name: "Phase 4 | Enable and start the role service"
+      ansible.builtin.systemd_service:
+        name: "{{ kk_role_service }}"
+        enabled: true
+        state: started
+
+    - name: "Phase 4 | Deploy nginx site (API server only)"
+      ansible.builtin.template:
+        src: nginx-site.j2
+        dest: "{{ kk_nginx_site_file }}"
+        owner: root
+        group: root
+        mode: "0644"
+      when: kk_install_nginx
+      notify: Reload nginx
+
+    - name: "Phase 4 | Enable nginx site"
+      ansible.builtin.file:
+        src: "{{ kk_nginx_site_file }}"
+        dest: "{{ kk_nginx_site_link }}"
+        state: link
+      when: kk_install_nginx
+      notify: Reload nginx
+
+    - name: "Phase 4 | Disable nginx default site"
+      ansible.builtin.file:
+        path: "{{ kk_nginx_default_site }}"
+        state: absent
+      when: kk_install_nginx
+      notify: Reload nginx
+
+    # =========================================================================
+    # Phase 5: Firewall (default deny, explicit commented allows)
+    # =========================================================================
+    - name: "Phase 5 | Allow required ports (SSH first, so we never lock ourselves out)"
+      community.general.ufw:
+        rule: allow
+        port: "{{ item.port }}"
+        proto: tcp
+        from_ip: "{{ item.from }}"
+        comment: "{{ item.comment }}"
+      loop: "{{ kk_firewall_rules }}"
+
+    - name: "Phase 5 | Default policy for incoming traffic"
+      community.general.ufw:
+        direction: incoming
+        default: "{{ kk_firewall_default_incoming }}"
+
+    - name: "Phase 5 | Default policy for outgoing traffic"
+      community.general.ufw:
+        direction: outgoing
+        default: "{{ kk_firewall_default_outgoing }}"
+
+    - name: "Phase 5 | Enable firewall"
+      community.general.ufw:
+        state: enabled
+
+    # =========================================================================
+    # Phase 6: Journal persistence
+    # =========================================================================
+    - name: "Phase 6 | Create persistent journal directory"
+      ansible.builtin.file:
+        path: "{{ kk_journal_dir }}"
+        state: directory
+        owner: root
+        group: systemd-journal
+        mode: "2755"
+      notify: Restart journald
+
+    - name: "Phase 6 | Create journald drop-in directory"
+      ansible.builtin.file:
+        path: "{{ kk_journald_dropin_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: "Phase 6 | Configure persistent, size-capped journal"
+      ansible.builtin.template:
+        src: journald.conf.j2
+        dest: "{{ kk_journald_dropin_file }}"
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart journald
+
+    # =========================================================================
+    # Phase 7: Logrotate
+    # =========================================================================
+    - name: "Phase 7 | Configure log rotation for shared logs"
+      ansible.builtin.template:
+        src: logrotate.j2
+        dest: "{{ kk_logrotate_file }}"
+        owner: root
+        group: root
+        mode: "0644"
+        validate: logrotate --debug %s
+
+    # =========================================================================
+    # Verification (read-only: reports ok, never changed)
+    # =========================================================================
+    - name: "Verify | Run any pending handlers before checking"
+      ansible.builtin.meta: flush_handlers
+
+    - name: "Verify | Role service answers on its port"
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:{{ svc.port }}/"
+        return_content: true
+      register: kk_health
+      retries: 5
+      delay: 2
+      until: kk_health.status == 200
+
+    - name: "Verify | Challenge D - payments account can read its environment file"
+      ansible.builtin.command: "test -r {{ svc.env_file }}"
+      become: true
+      become_user: "{{ svc.user }}"
+      vars:
+        # Service accounts have no home directory (/nonexistent), so give
+        # Ansible a writable temp location when acting as one
+        ansible_remote_tmp: /tmp
+      changed_when: false
+      when: kk_role_service == 'kk-payments'
+
+    - name: "Verify | Read kk-payments security exposure score"
+      ansible.builtin.command: "systemd-analyze security {{ kk_role_service }}.service --no-pager"
+      register: kk_security
+      changed_when: false
+      when: kk_role_service == 'kk-payments'
+
+    - name: "Verify | Requirement 5 - kk-payments scores below the target"
+      ansible.builtin.assert:
+        that:
+          - kk_payments_score | float < kk_payments_max_exposure | float
+        fail_msg: "kk-payments exposure {{ kk_payments_score }} is not below {{ kk_payments_max_exposure }}"
+        success_msg: "kk-payments exposure {{ kk_payments_score }} (target below {{ kk_payments_max_exposure }})"
+      vars:
+        kk_payments_score: "{{ kk_security.stdout | regex_search('Overall exposure level for \\S+: ([0-9.]+)', '\\1') | first }}"
+      when: kk_role_service == 'kk-payments'
