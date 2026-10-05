@@ -1,0 +1,21 @@
+# Copy to terraform.tfvars (which is git-ignored) and adjust per environment.
+environment = "staging"
+vm_image    = "22.04"
+
+servers = {
+  api = {
+    cpus   = 1
+    memory = "1G"
+    disk   = "8G"
+  }
+  payments = {
+    cpus   = 1
+    memory = "1G"
+    disk   = "8G"
+  }
+  logs = {
+    cpus   = 1
+    memory = "1G"
+    disk   = "8G"
+  }
+}
