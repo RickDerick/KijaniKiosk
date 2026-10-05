@@ -1,0 +1,9 @@
+---
+# Payments server: never public. Only the API server and monitoring may reach it.
+kk_role_service: kk-payments
+kk_install_nginx: false
+
+kk_firewall_rules:
+  - { port: "{{ kk_ssh_port }}", from: any, comment: "SSH admin access" }
+  - { port: "3001", from: "{{ kk_api_ip }}", comment: "payments calls from the API server only" }
+  - { port: "3001", from: "{{ kk_monitoring_cidr }}", comment: "payments health check from monitoring subnet" }
