@@ -7,3 +7,6 @@
 crash.log
 
 # Do NOT ignore .terraform.lock.hcl - it pins provider versions
+
+# Ansible: per-run known hosts written by pipeline.sh
+ansible/.known_hosts

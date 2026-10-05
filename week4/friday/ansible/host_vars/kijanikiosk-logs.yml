@@ -1,0 +1,10 @@
+---
+# Logs server: receives logs from the API and payments servers only.
+kk_role_service: kk-logs
+kk_install_nginx: false
+
+kk_firewall_rules:
+  - { port: "{{ kk_ssh_port }}", from: any, comment: "SSH admin access" }
+  - { port: "3002", from: "{{ kk_api_ip }}", comment: "log shipping from the API server" }
+  - { port: "3002", from: "{{ kk_payments_ip }}", comment: "log shipping from the payments server" }
+  - { port: "3002", from: "{{ kk_monitoring_cidr }}", comment: "logs health check from monitoring subnet" }

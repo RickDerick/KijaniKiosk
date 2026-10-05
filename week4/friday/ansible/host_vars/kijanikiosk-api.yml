@@ -1,0 +1,9 @@
+---
+# API server: public web entry point. nginx on port 80 proxies to kk-api.
+kk_role_service: kk-api
+kk_install_nginx: true
+
+kk_firewall_rules:
+  - { port: "{{ kk_ssh_port }}",  from: any, comment: "SSH admin access" }
+  - { port: "{{ kk_http_port }}", from: any, comment: "HTTP public web via nginx" }
+  - { port: "3000", from: "{{ kk_monitoring_cidr }}", comment: "api health check from monitoring subnet" }

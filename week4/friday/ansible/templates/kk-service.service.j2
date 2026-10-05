@@ -1,0 +1,64 @@
+# {{ ansible_managed }}
+[Unit]
+Description={{ svc.description }}
+After={{ svc.after }}
+{% if svc.wants %}
+Wants={{ svc.wants }}
+{% endif %}
+StartLimitIntervalSec={{ kk_start_limit_interval }}
+StartLimitBurst={{ kk_start_limit_burst }}
+
+[Service]
+Type=simple
+User={{ svc.user }}
+Group={{ svc.user }}
+WorkingDirectory={{ svc.workdir }}
+EnvironmentFile={{ svc.env_file }}
+Environment=PORT={{ svc.port }}
+Environment=BIND_ADDRESS={{ kk_bind_address }}
+Environment=SERVICE_NAME={{ kk_role_service }}
+Environment=NODE_ENV={{ kk_environment }}
+ExecStart={{ kk_node_binary }} {{ svc.workdir }}/{{ svc.script }}
+{% if svc.reload %}
+ExecReload=/bin/kill -HUP $MAINPID
+{% endif %}
+Restart=on-failure
+RestartSec={{ kk_restart_sec }}
+
+# --- Hardening shared by all services ---
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths={{ kk_shared_logs_dir }}
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictNamespaces=true
+LockPersonality=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+SystemCallArchitectures=native
+AmbientCapabilities=
+UMask=0077
+RemoveIPC=true
+{% if svc.profile == 'strict' %}
+
+# --- Payments-only hardening (target: exposure below {{ kk_payments_max_exposure }}) ---
+ProtectProc=invisible
+ProcSubset=pid
+CapabilityBoundingSet=
+KeyringMode=private
+# Node's V8 JIT needs writable+executable memory; true would crash the runtime
+MemoryDenyWriteExecute=false
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target
