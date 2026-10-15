@@ -1,0 +1,171 @@
+Started by an SCM change
+Obtained Jenkinsfile from git https://github.com/RickDerick/kijanikiosk-payments.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/kijanikiosk-payments
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential github-kijanikiosk
+Cloning the remote Git repository
+Cloning repository https://github.com/RickDerick/kijanikiosk-payments.git
+ > git init /var/lib/jenkins/workspace/kijanikiosk-payments # timeout=10
+Fetching upstream changes from https://github.com/RickDerick/kijanikiosk-payments.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.34.1'
+using GIT_ASKPASS to set credentials This are  my git credentials 
+ > git fetch --tags --force --progress -- https://github.com/RickDerick/kijanikiosk-payments.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/RickDerick/kijanikiosk-payments.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 711eb67ad7c34e29cfe6711c87907e745b65a0f6 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 711eb67ad7c34e29cfe6711c87907e745b65a0f6 # timeout=10
+Commit message: "fault: lint (deliberate, will be reverted)"
+ > git rev-list --no-walk 521048f2626dbed72a4db4bcfad4d98f8345d94f # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:22.22.0-bookworm-slim
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins does not seem to be running inside a container
+$ docker run -t -d -u 112:120 -w /var/lib/jenkins/workspace/kijanikiosk-payments -v /var/lib/jenkins/workspace/kijanikiosk-payments:/var/lib/jenkins/workspace/kijanikiosk-payments:rw,z -v /var/lib/jenkins/workspace/kijanikiosk-payments@tmp:/var/lib/jenkins/workspace/kijanikiosk-payments@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:22.22.0-bookworm-slim cat
+$ docker top b9e2e88218616d14db2ca691064195c20764f86b03cab16bc349744fc6a3dd84 -eo pid,comm
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 15 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Lint)
+[Pipeline] sh
++ node --version
+v22.22.0
++ npm --version
+10.9.4
+[Pipeline] echo
+Installing dependencies for kijanikiosk-payments...
+[Pipeline] sh
++ npm ci
+npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
+added 344 packages, and audited 345 packages in 16s
+
+65 packages are looking for funding
+  run `npm fund` for details
+
+19 moderate severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[Pipeline] sh
++ npm run lint
+
+> kijanikiosk-payments@1.0.0 lint
+> eslint .
+
+
+/var/lib/jenkins/workspace/kijanikiosk-payments/src/payments.js
+  86:7  error  'injectedLintFault' is assigned a value but never used  no-unused-vars
+
+✖ 1 problem (1 error, 0 warnings)
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+Stage "Build" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify)
+Stage "Verify" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] parallel
+[Pipeline] { (Branch: Test)
+[Pipeline] { (Branch: Security Audit)
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] stage
+[Pipeline] { (Security Audit)
+Stage "Test" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+Stage "Security Audit" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] // stage
+[Pipeline] }
+Failed in branch Test
+[Pipeline] }
+Failed in branch Security Audit
+[Pipeline] // parallel
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Archive)
+Stage "Archive" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publish)
+Stage "Publish" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] junit
+Recording test results
+No test report files were found. Configuration error?
+[Checks API] No suitable checks publisher found.
+[Pipeline] echo
+Build URL: http://10.4.110.126:8080/job/kijanikiosk-payments/28/
+[Pipeline] echo
+Total pipeline time: 29 sec
+[Pipeline] cleanWs
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] done
+[Pipeline] echo
+NOTIFY: kijanikiosk-payments build status changed to FAILURE in build 28
+[Pipeline] echo
+NOTIFY: kijanikiosk-payments build 28 FAILED - fixing it is the team's top priority. Log: http://10.4.110.126:8080/job/kijanikiosk-payments/28/console
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+$ docker stop --time=1 b9e2e88218616d14db2ca691064195c20764f86b03cab16bc349744fc6a3dd84
+$ docker rm -f --volumes b9e2e88218616d14db2ca691064195c20764f86b03cab16bc349744fc6a3dd84
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE
