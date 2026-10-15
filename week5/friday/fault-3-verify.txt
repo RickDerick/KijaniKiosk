@@ -1,0 +1,311 @@
+Started by user derick haron
+Obtained Jenkinsfile from git https://github.com/RickDerick/kijanikiosk-payments.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/kijanikiosk-payments
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential github-kijanikiosk
+Cloning the remote Git repository
+Cloning repository https://github.com/RickDerick/kijanikiosk-payments.git
+ > git init /var/lib/jenkins/workspace/kijanikiosk-payments # timeout=10
+Fetching upstream changes from https://github.com/RickDerick/kijanikiosk-payments.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.34.1'
+using GIT_ASKPASS to set credentials This are  my git credentials 
+ > git fetch --tags --force --progress -- https://github.com/RickDerick/kijanikiosk-payments.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/RickDerick/kijanikiosk-payments.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 17dd0905d69751b41aa7463631647cf239961f8a (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 17dd0905d69751b41aa7463631647cf239961f8a # timeout=10
+Commit message: "fault: verify/test (deliberate, will be reverted)"
+ > git rev-list --no-walk 52f3211081b503841d502976951073d5ad1fdf46 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:22.22.0-bookworm-slim
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins does not seem to be running inside a container
+$ docker run -t -d -u 112:120 -w /var/lib/jenkins/workspace/kijanikiosk-payments -v /var/lib/jenkins/workspace/kijanikiosk-payments:/var/lib/jenkins/workspace/kijanikiosk-payments:rw,z -v /var/lib/jenkins/workspace/kijanikiosk-payments@tmp:/var/lib/jenkins/workspace/kijanikiosk-payments@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:22.22.0-bookworm-slim cat
+$ docker top cd75e97435016a87990e67e115ad5427b48a0e326a685954f4a2e3843a48e2d7 -eo pid,comm
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 15 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Lint)
+[Pipeline] sh
++ node --version
+v22.22.0
++ npm --version
+10.9.4
+[Pipeline] echo
+Installing dependencies for kijanikiosk-payments...
+[Pipeline] sh
++ npm ci
+npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
+added 344 packages, and audited 345 packages in 13s
+
+65 packages are looking for funding
+  run `npm fund` for details
+
+19 moderate severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[Pipeline] sh
++ npm run lint
+
+> kijanikiosk-payments@1.0.0 lint
+> eslint .
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] echo
+Building application...
+[Pipeline] sh
++ npm run build
+
+> kijanikiosk-payments@1.0.0 build
+> node scripts/build.js
+
+Built into dist/ (commit 17dd0905d69751b41aa7463631647cf239961f8a)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ node -p require('./package.json').version
+[Pipeline] sh
++ echo 17dd0905d69751b41aa7463631647cf239961f8a
++ cut -c1-7
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] echo
+Artifact version: 1.0.0-17dd090
+[Pipeline] sh
++ set -e
++ test -d dist
++ cd dist
++ npm version 1.0.0-17dd090 --no-git-tag-version
+v1.0.0-17dd090
++ wc -l
++ ls
++ echo Build output: 4 files in dist/
+Build output: 4 files in dist/
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify)
+[Pipeline] parallel
+[Pipeline] { (Branch: Test)
+[Pipeline] { (Branch: Security Audit)
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] stage
+[Pipeline] { (Security Audit)
+[Pipeline] echo
+Running test suite for kijanikiosk-payments...
+[Pipeline] sh
+[Pipeline] sh
++ set -e
++ npm test -- --ci
+
+> kijanikiosk-payments@1.0.0 test
+> jest --ci
+
++ npm audit --audit-level=high
+jest-haste-map: Haste module naming collision: kijanikiosk-payments
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>/package.json
+    * <rootDir>/dist/package.json
+
+FAIL tests/payments.test.js
+  ● ci-pipeline-verification: deliberate failure
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+    [0m [90m 86 |[39m
+     [90m 87 |[39m test([32m'ci-pipeline-verification: deliberate failure'[39m[33m,[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 88 |[39m   expect([36mtrue[39m)[33m.[39mtoBe([36mfalse[39m)[33m;[39m
+     [90m    |[39m                [31m[1m^[22m[39m
+     [90m 89 |[39m })[33m;[39m
+     [90m 90 |[39m[0m
+
+      at Object.toBe (tests/payments.test.js:88:16)
+
+PASS tests/app.test.js
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 29 passed, 30 total
+Snapshots:   0 total
+Time:        0.343 s
+Ran all test suites.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+Failed in branch Test
+# npm audit report
+
+sprintf-js  *
+Severity: moderate
+sprintf-js vulnerable to denial of service through unbounded precision specifiers - https://github.com/advisories/GHSA-hp3w-g68c-fv3c
+fix available via `npm audit fix --force`
+Will install jest@25.0.0, which is a breaking change
+node_modules/sprintf-js
+  argparse  1.0.0 - 1.0.10
+  Depends on vulnerable versions of sprintf-js
+  node_modules/argparse
+    js-yaml  3.2.7 - 3.15.2
+    Depends on vulnerable versions of argparse
+    node_modules/js-yaml
+      @istanbuljs/load-nyc-config  *
+      Depends on vulnerable versions of js-yaml
+      node_modules/@istanbuljs/load-nyc-config
+        babel-plugin-istanbul  >=6.0.0-beta.0
+        Depends on vulnerable versions of @istanbuljs/load-nyc-config
+        node_modules/babel-plugin-istanbul
+          @jest/transform  >=25.1.0
+          Depends on vulnerable versions of babel-plugin-istanbul
+          node_modules/@jest/transform
+            @jest/core  >=25.1.0
+            Depends on vulnerable versions of @jest/reporters
+            Depends on vulnerable versions of @jest/transform
+            Depends on vulnerable versions of jest-config
+            Depends on vulnerable versions of jest-resolve-dependencies
+            Depends on vulnerable versions of jest-runner
+            Depends on vulnerable versions of jest-runtime
+            Depends on vulnerable versions of jest-snapshot
+            node_modules/@jest/core
+              jest  >=25.1.0
+              Depends on vulnerable versions of @jest/core
+              Depends on vulnerable versions of jest-cli
+              node_modules/jest
+              jest-cli  >=25.1.0
+              Depends on vulnerable versions of @jest/core
+              Depends on vulnerable versions of jest-config
+              node_modules/jest-cli
+            @jest/reporters  >=25.1.0
+            Depends on vulnerable versions of @jest/transform
+            node_modules/@jest/reporters
+            jest-runner  >=25.1.0
+            Depends on vulnerable versions of @jest/transform
+            Depends on vulnerable versions of jest-runtime
+            node_modules/jest-runner
+              jest-config  >=25.1.0
+              Depends on vulnerable versions of babel-jest
+              Depends on vulnerable versions of jest-circus
+              Depends on vulnerable versions of jest-runner
+              node_modules/jest-config
+            jest-runtime  >=25.1.0
+            Depends on vulnerable versions of @jest/globals
+            Depends on vulnerable versions of @jest/transform
+            Depends on vulnerable versions of jest-snapshot
+            node_modules/jest-runtime
+              jest-circus  >=25.2.4
+              Depends on vulnerable versions of @jest/expect
+              Depends on vulnerable versions of jest-runtime
+              Depends on vulnerable versions of jest-snapshot
+              node_modules/jest-circus
+            jest-snapshot  >=27.0.0-next.0
+            Depends on vulnerable versions of @jest/transform
+            node_modules/jest-snapshot
+              @jest/expect  *
+              Depends on vulnerable versions of jest-snapshot
+              node_modules/@jest/expect
+                @jest/globals  >=28.0.0-alpha.0
+                Depends on vulnerable versions of @jest/expect
+                node_modules/@jest/globals
+              jest-resolve-dependencies  >=27.0.0-next.0
+              Depends on vulnerable versions of jest-snapshot
+              node_modules/jest-resolve-dependencies
+          babel-jest  >=25.1.0
+          Depends on vulnerable versions of @jest/transform
+          Depends on vulnerable versions of babel-plugin-istanbul
+          node_modules/babel-jest
+
+19 moderate severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // parallel
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Archive)
+Stage "Archive" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publish)
+Stage "Publish" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] junit
+Recording test results
+[Checks API] No suitable checks publisher found.
+[Pipeline] echo
+Build URL: http://10.4.110.126:8080/job/kijanikiosk-payments/33/
+[Pipeline] echo
+Total pipeline time: 25 sec
+[Pipeline] cleanWs
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] done
+[Pipeline] echo
+NOTIFY: kijanikiosk-payments build status changed to FAILURE in build 33
+[Pipeline] echo
+NOTIFY: kijanikiosk-payments build 33 FAILED - fixing it is the team's top priority. Log: http://10.4.110.126:8080/job/kijanikiosk-payments/33/console
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+$ docker stop --time=1 cd75e97435016a87990e67e115ad5427b48a0e326a685954f4a2e3843a48e2d7
+$ docker rm -f --volumes cd75e97435016a87990e67e115ad5427b48a0e326a685954f4a2e3843a48e2d7
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE
