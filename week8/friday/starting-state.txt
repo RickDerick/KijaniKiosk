@@ -1,0 +1,22 @@
+# Starting state reset (2026-11-01 14:42:25)
+deployment.apps "kk-payments" deleted from default namespace
+service "kk-payments-service" deleted from default namespace
+## Namespace check (expect: No resources found)
+NAME                               READY   STATUS        RESTARTS   AGE
+pod/kk-payments-5bd47c6b86-55w49   1/1     Terminating   0          112m
+pod/kk-payments-5bd47c6b86-drrfx   1/1     Terminating   0          112m
+## ImagePullSecret kept
+NAME                          TYPE                             DATA   AGE
+kijani-registry-credentials   kubernetes.io/dockerconfigjson   1      14h
+## Local kk-payments images before removal
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+derickharon/kk-payments:1.0.0-e6963d5                                                                 2a580bb914be        234MB         57.4MB        
+kijanikiosk/kk-payments:v1.0.0-builder                                                                912d002f4e5a        355MB         82.7MB        
+kijanikiosk/kk-payments:v1.0.0-local                                                                  4a515d91b626        233MB         57.4MB        
+kijanikiosk/kk-payments:v1.0.0-multi                                                                  2ed154b21a2e        233MB         57.4MB        
+kijanikiosk/kk-payments:v1.0.0-secure                                                                 b4304035099c        234MB         57.4MB        
+## Local kk-payments images after removal (expect: none)
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+none
+## Namespace re-check after termination finished (14:45:04)
+No resources found in default namespace.

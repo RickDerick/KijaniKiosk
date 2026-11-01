@@ -1,0 +1,382 @@
+# Requirement 2: versioned push to the private registry (2026-11-01 14:51:40)
+Registry: Docker Hub private repository docker.io/derickharon/kk-payments
+
+## Version string computation (scripted, never typed)
+$ PKG_VERSION=$(node -p "require('./package.json').version")
+$ GIT_SHORT=$(git rev-parse --short HEAD)
+$ IMAGE_TAG="${PKG_VERSION}-${GIT_SHORT}"
+PKG_VERSION=1.0.0
+GIT_SHORT=a59f2c1
+IMAGE_TAG=1.0.0-a59f2c1
+HEAD commit: a59f2c1 Week 8 Friday: version in /health, Dockerfile.production, k8s manifests
+
+## Push
+$ docker push docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+The push refers to repository [docker.io/derickharon/kk-payments]
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+8d513d1f314d: Layer already exists
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+fc1c5222d85f: Layer already exists
+0e6404b25534: Waiting
+2b752f7c71fd: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+0e6404b25534: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+0e6404b25534: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+589002ba0eae: Waiting
+0e6404b25534: Waiting
+4e08a1521570: Waiting
+2b752f7c71fd: Waiting
+589002ba0eae: Layer already exists
+4e08a1521570: Waiting
+2b752f7c71fd: Layer already exists
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+4e08a1521570: Waiting
+4e08a1521570: Waiting
+a2caa29f95fd: Waiting
+d2a1da44b373: Waiting
+aa0e43cb1a97: Waiting
+658e99dd0fd1: Waiting
+78defbfcefd9: Waiting
+1d365e7087a1: Waiting
+4e08a1521570: Waiting
+d2a1da44b373: Waiting
+658e99dd0fd1: Waiting
+4e08a1521570: Waiting
+d2a1da44b373: Waiting
+658e99dd0fd1: Waiting
+d2a1da44b373: Waiting
+658e99dd0fd1: Waiting
+4e08a1521570: Waiting
+4e08a1521570: Waiting
+d2a1da44b373: Waiting
+658e99dd0fd1: Waiting
+0e6404b25534: Pushed
+4e08a1521570: Pushed
+aa0e43cb1a97: Pushed
+1d365e7087a1: Pushed
+d2a1da44b373: Pushed
+a2caa29f95fd: Pushed
+658e99dd0fd1: Pushed
+78defbfcefd9: Pushed
+1.0.0-a59f2c1: digest: sha256:38b1fd2a1de1c76471933cd134ff970edc2c6670df6fc5ad8c886461dedd270e size: 856
+
+## Delete local copy (registry must be the source of truth)
+$ docker rmi docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+Untagged: derickharon/kk-payments:1.0.0-a59f2c1
+Deleted: sha256:38b1fd2a1de1c76471933cd134ff970edc2c6670df6fc5ad8c886461dedd270e
+Local kk-payments images after delete:
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+none
+
+## Pull fresh from the registry
+$ docker pull docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+1.0.0-a59f2c1: Pulling from derickharon/kk-payments
+a2caa29f95fd: Pulling fs layer
+1d365e7087a1: Pulling fs layer
+4e08a1521570: Pulling fs layer
+658e99dd0fd1: Pulling fs layer
+0e6404b25534: Pulling fs layer
+d2a1da44b373: Pulling fs layer
+78defbfcefd9: Pulling fs layer
+d2a1da44b373: Already exists
+0e6404b25534: Already exists
+78defbfcefd9: Already exists
+4e08a1521570: Already exists
+658e99dd0fd1: Already exists
+a2caa29f95fd: Already exists
+1d365e7087a1: Already exists
+0e6404b25534: Pull complete
+4e08a1521570: Pull complete
+a2caa29f95fd: Pull complete
+78defbfcefd9: Pull complete
+d2a1da44b373: Pull complete
+1d365e7087a1: Pull complete
+658e99dd0fd1: Pull complete
+aa0e43cb1a97: Download complete
+Digest: sha256:38b1fd2a1de1c76471933cd134ff970edc2c6670df6fc5ad8c886461dedd270e
+Status: Downloaded newer image for derickharon/kk-payments:1.0.0-a59f2c1
+docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+
+## Pulled image runs and reports the same tag
+kijani
+APP_VERSION=1.0.0-a59f2c1
+
+Full image reference for the Deployment manifest:
+docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+NOTE: 'Already exists' lines are the shared node:22.22.0-alpine base layers still cached locally; the kk-payments image itself was deleted and re-downloaded, and the pulled digest matches the build ID 38b1fd2a1de1.

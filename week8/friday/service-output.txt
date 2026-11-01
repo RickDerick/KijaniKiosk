@@ -1,0 +1,28 @@
+# Requirement 4: Service with verified external access (2026-11-01 15:06:23)
+## Apply
+service/kk-payments-service created (dry run)
+service/kk-payments-service created
+
+## kubectl get service
+NAME                  TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+kk-payments-service   NodePort   10.97.84.37   <none>        3001:30001/TCP   3s
+
+## kubectl get endpoints (expect both Pod IPs, not <none>)
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME                  ENDPOINTS                         AGE
+kk-payments-service   10.244.0.6:3001,10.244.0.7:3001   3s
+
+## Pod IPs for comparison
+NAME                           IP
+kk-payments-6c894766f8-5xxb4   10.244.0.6
+kk-payments-6c894766f8-7vzgc   10.244.0.7
+
+## External access through the NodePort (version must be 1.0.0-a59f2c1)
+$ curl http://192.168.49.2:30001/health
+{"service":"kk-payments","status":"ok","version":"1.0.0-a59f2c1"}
+
+## In-cluster DNS (temporary curl Pod)
+{"service":"kk-payments","status":"ok","version":"1.0.0-a59f2c1"}warning: couldn't attach to pod/curl-test, falling back to streaming logs: unable to upgrade connection: container curl-test not found in pod curl-test_default
+{"service":"kk-payments","status":"ok","version":"1.0.0-a59f2c1"}
+## In-cluster DNS (fallback: wget from inside a kk-payments Pod)
+{"service":"kk-payments","status":"ok","version":"1.0.0-a59f2c1"}

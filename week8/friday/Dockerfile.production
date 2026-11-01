@@ -1,0 +1,44 @@
+# ─── Stage 1: Builder (all tools; thrown away after the build) ───
+FROM node:22.22.0-alpine AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+# Recorded in build-info.json by scripts/build.js
+ARG GIT_COMMIT=unknown
+RUN npm run build
+
+# ─── Stage 2: Production (only what runs) ───
+FROM node:22.22.0-alpine AS production
+
+# Non-root user (Alpine syntax)
+RUN addgroup -S kijani && adduser -S kijani -G kijani
+
+WORKDIR /app
+
+# Runtime dependencies only
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+# Only the built app from the builder
+COPY --from=builder /app/dist/src ./src
+COPY --from=builder /app/dist/build-info.json ./
+
+RUN chown -R kijani:kijani /app
+USER kijani
+
+# The semver-SHA tag, passed in at build time, so /health reports exactly what is deployed
+ARG APP_VERSION=unknown
+ENV NODE_ENV=production \
+    APP_VERSION=${APP_VERSION}
+
+EXPOSE 3001
+
+# wget is included in Alpine; 127.0.0.1 avoids the localhost→IPv6 issue
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:3001/health || exit 1
+
+CMD ["node", "src/server.js"]
