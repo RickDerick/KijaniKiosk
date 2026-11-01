@@ -1,0 +1,29 @@
+# Requirement 3: Deployment using today's tag (2026-11-01 14:56:28)
+## Challenge A: manifest tag vs registry
+Manifest image: docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+Pushed image:   docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+MATCH
+Tag exists in registry: yes
+
+## Apply
+deployment.apps/kk-payments created (dry run)
+deployment.apps/kk-payments created
+Waiting for deployment "kk-payments" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "kk-payments" rollout to finish: 1 of 2 updated replicas are available...
+deployment "kk-payments" successfully rolled out
+Both Pods ready after 12 seconds (limit: 180)
+
+## kubectl get deployment (expect READY 2/2, AVAILABLE 2)
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+kk-payments   2/2     2            2           11s
+
+## kubectl get pods
+NAME                           READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+kk-payments-6c894766f8-5xxb4   1/1     Running   0          11s   10.244.0.6   minikube   <none>           <none>
+kk-payments-6c894766f8-7vzgc   1/1     Running   0          11s   10.244.0.7   minikube   <none>           <none>
+
+## Image, replicas, pull secret and resources as applied
+docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+replicas=2
+imagePullSecrets=kijani-registry-credentials
+resources={"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"100m","memory":"64Mi"}}

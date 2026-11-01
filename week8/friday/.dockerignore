@@ -1,0 +1,25 @@
+# Installed inside the image
+node_modules/
+
+# Never let secrets into an image
+.env
+.npmrc
+*.key
+*.pem
+
+# Not needed in the image (tests run in Jenkins, not in the image build)
+.git/
+.gitignore
+coverage/
+test-results/
+dist/
+tests/
+**/*.test.js
+eslint.config.js
+*.tgz
+*.tar.gz
+Jenkinsfile
+README.md
+k8s/
+Dockerfile*
+.dockerignore

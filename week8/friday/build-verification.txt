@@ -1,0 +1,149 @@
+# Requirement 1: clean production build (2026-11-01 14:45:48)
+Commit: a59f2c1 Week 8 Friday: version in /health, Dockerfile.production, k8s manifests
+Image:  docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+
+## docker build --no-cache
+$ docker build --no-cache -f Dockerfile.production --build-arg APP_VERSION=1.0.0-a59f2c1 --build-arg GIT_COMMIT=a59f2c1 -t docker.io/derickharon/kk-payments:1.0.0-a59f2c1 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.production
+#1 transferring dockerfile: 1.24kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:22.22.0-alpine
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context:
+#3 transferring context: 370B done
+#3 DONE 0.0s
+
+#4 [builder 1/6] FROM docker.io/library/node:22.22.0-alpine@sha256:e4bf2a82ad0a4037d28035ae71529873c069b13eb0455466ae0bc13363826e34
+#4 resolve docker.io/library/node:22.22.0-alpine@sha256:e4bf2a82ad0a4037d28035ae71529873c069b13eb0455466ae0bc13363826e34 0.0s done
+#4 CACHED
+
+#5 [builder 2/6] WORKDIR /app
+#5 CACHED
+
+#6 [internal] load build context
+#6 transferring context: 2.09kB done
+#6 DONE 0.0s
+
+#7 [builder 3/6] COPY package.json package-lock.json ./
+#7 DONE 0.1s
+
+#8 [production 2/8] RUN addgroup -S kijani && adduser -S kijani -G kijani
+#8 DONE 0.4s
+
+#9 [builder 4/6] RUN npm ci
+#9 ...
+
+#10 [production 3/8] WORKDIR /app
+#10 DONE 0.1s
+
+#11 [production 4/8] COPY package.json package-lock.json ./
+#11 DONE 0.1s
+
+#12 [production 5/8] RUN npm ci --omit=dev && npm cache clean --force
+#12 1.451 
+#12 1.451 up to date, audited 1 package in 1s
+#12 1.453 
+#12 1.453 found 0 vulnerabilities
+#12 1.665 npm warn using --force Recommended protections disabled.
+#12 DONE 1.9s
+
+#9 [builder 4/6] RUN npm ci
+#9 7.979 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#9 17.25 
+#9 17.25 added 344 packages, and audited 345 packages in 17s
+#9 17.25 
+#9 17.25 65 packages are looking for funding
+#9 17.25   run `npm fund` for details
+#9 17.32 
+#9 17.32 23 vulnerabilities (3 low, 20 moderate)
+#9 17.32 
+#9 17.32 To address issues that do not require attention, run:
+#9 17.32   npm audit fix
+#9 17.32 
+#9 17.32 To address all issues (including breaking changes), run:
+#9 17.32   npm audit fix --force
+#9 17.32 
+#9 17.32 Run `npm audit` for details.
+#9 17.32 npm notice
+#9 17.32 npm notice New major version of npm available! 10.9.4 -> 12.2.1
+#9 17.32 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+#9 17.32 npm notice To update run: npm install -g npm@12.2.1
+#9 17.32 npm notice
+#9 DONE 17.5s
+
+#13 [builder 5/6] COPY . .
+#13 DONE 0.2s
+
+#14 [builder 6/6] RUN npm run build
+#14 0.474 
+#14 0.474 > kijanikiosk-payments@1.0.0 build
+#14 0.474 > node scripts/build.js
+#14 0.474 
+#14 0.527 Built into dist/ (commit a59f2c1)
+#14 DONE 0.6s
+
+#15 [production 6/8] COPY --from=builder /app/dist/src ./src
+#15 DONE 0.1s
+
+#16 [production 7/8] COPY --from=builder /app/dist/build-info.json ./
+#16 DONE 0.1s
+
+#17 [production 8/8] RUN chown -R kijani:kijani /app
+#17 DONE 0.3s
+
+#18 exporting to image
+#18 exporting layers
+#18 exporting layers 0.8s done
+#18 exporting manifest sha256:97ac22df6cc3f8995a5781d856b8bbc5c636637b1234e369243f2066c046750f 0.0s done
+#18 exporting config sha256:529831e027ae6dfb38f43228d5e60715cb04b4304ae9eb1eacd9a9b040961ba5 0.0s done
+#18 exporting attestation manifest sha256:3d450e11bf47a3afec9f605b8ce67621cb7b38f1ce72c9bcb1c418efe5842a9b 0.1s done
+#18 exporting manifest list sha256:38b1fd2a1de1c76471933cd134ff970edc2c6670df6fc5ad8c886461dedd270e
+#18 exporting manifest list sha256:38b1fd2a1de1c76471933cd134ff970edc2c6670df6fc5ad8c886461dedd270e 0.0s done
+#18 naming to docker.io/derickharon/kk-payments:1.0.0-a59f2c1 0.0s done
+#18 unpacking to docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+#18 unpacking to docker.io/derickharon/kk-payments:1.0.0-a59f2c1 0.3s done
+#18 DONE 1.4s
+
+## Image size
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+IMAGE                                   ID             DISK USAGE   CONTENT SIZE   EXTRA
+derickharon/kk-payments:1.0.0-a59f2c1   38b1fd2a1de1        234MB         57.4MB        
+NOTE: Docker 29 shows two sizes. CONTENT SIZE is the image itself (what is pushed,
+pulled and shown by Docker Hub) and is the figure used for the under-100MB requirement.
+DISK USAGE also counts the unpacked copy stored on this machine.
+
+## whoami (expect: kijani)
+kijani
+
+## which tsc (expect: empty output)
+which tsc exit code: 1 (1 = not found)
+
+## No devDependencies: files under node_modules (expect 0 or 1) and jest present?
+1
+jest not present
+
+## Image contents
+.
+..
+build-info.json
+node_modules
+package-lock.json
+package.json
+src
+
+## HEALTHCHECK configured in the image
+{"Test":["CMD-SHELL","wget -qO- http://127.0.0.1:3001/health || exit 1"],"Interval":30000000000,"Timeout":5000000000,"StartPeriod":30000000000,"Retries":3}
+
+## HEALTHCHECK transition (must be healthy within 60s)
+t+0s  starting
+t+3s  starting
+t+6s  healthy
+Healthy after 6 seconds
+
+## /health from the running container (version must equal 1.0.0-a59f2c1)
+{"service":"kk-payments","status":"ok","version":"1.0.0-a59f2c1"}

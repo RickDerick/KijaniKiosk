@@ -1,0 +1,33 @@
+# Self-healing measurement (2026-11-01 15:08:01)
+Image: docker.io/derickharon/kk-payments:1.0.0-a59f2c1
+Thursday's Pods were kk-payments-5bd47c6b86-55w49 and kk-payments-5bd47c6b86-drrfx
+
+## Pods before
+NAME                           READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+kk-payments-6c894766f8-5xxb4   1/1     Running   0          11m   10.244.0.6   minikube   <none>           <none>
+kk-payments-6c894766f8-7vzgc   1/1     Running   0          11m   10.244.0.7   minikube   <none>           <none>
+
+## kubectl get pods -l app=kk-payments -w  (each line prefixed with local time)
+15:08:01.806195018  kk-payments-6c894766f8-5xxb4   1/1   Running   0     11m
+15:08:01.815181384  kk-payments-6c894766f8-7vzgc   1/1   Running   0     11m
+15:08:03.829292256  >>> T0: deleting pod/kk-payments-6c894766f8-5xxb4
+15:08:03.944390660  kk-payments-6c894766f8-5xxb4   1/1   Terminating   0     11m
+15:08:03.954386788  kk-payments-6c894766f8-vw4n5   0/1   Pending       0     0s
+15:08:03.961176797  kk-payments-6c894766f8-5xxb4   1/1   Terminating   0     11m
+15:08:03.968492508  kk-payments-6c894766f8-vw4n5   0/1   Pending       0     0s
+15:08:03.983706935  kk-payments-6c894766f8-vw4n5   0/1   ContainerCreating   0     0s
+15:08:04.501305737  kk-payments-6c894766f8-vw4n5   0/1   ContainerCreating   0     1s
+15:08:04.613224413  kk-payments-6c894766f8-vw4n5   1/1   Running             0     1s
+15:08:04.683861968  >>> T1: 2/2 Pods Ready again
+
+## Pods after
+NAME                           READY   STATUS        RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+kk-payments-6c894766f8-5xxb4   1/1     Terminating   0          11m   10.244.0.6   minikube   <none>           <none>
+kk-payments-6c894766f8-7vzgc   1/1     Running       0          11m   10.244.0.7   minikube   <none>           <none>
+kk-payments-6c894766f8-vw4n5   1/1     Running       0          6s    10.244.0.9   minikube   <none>           <none>
+
+## Result
+Deleted Pod:   kk-payments-6c894766f8-5xxb4
+T0 (epoch s):  1793534883.820994847
+T1 (epoch s):  1793534884.676205608
+Recovery time: 0.9 seconds (deletion to 2/2 Ready)
